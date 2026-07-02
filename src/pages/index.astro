@@ -1,0 +1,821 @@
+---
+// EE Metro — digital sales systems for food manufacturers & distributors (NY/NJ)
+// Single-page landing. Pure static output, no client frameworks.
+const BOOK_URL = '#book'; // placeholder — set the real booking link before launch
+
+import { Image, getImage } from 'astro:assets';
+import '@fontsource-variable/archivo';
+import '@fontsource-variable/figtree';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+
+import heroImg from '../assets/hero-produce-data.jpg';
+import problemImg from '../assets/purchasing-manager-warehouse.jpg';
+import breadImg from '../assets/bread-production-line.jpg';
+import teamImg from '../assets/warehouse-team-clipboards.jpg';
+import spiceImg from '../assets/spice-world-map.jpg';
+
+const spiceBg = await getImage({ src: spiceImg, width: 1600, format: 'webp', quality: 60 });
+
+const title = 'Digital Sales Systems for Food Manufacturers & Distributors | EE Metro';
+const description =
+  'EE Metro builds revenue operations systems for food manufacturers and distributors in New York and New Jersey: capture every inquiry, automate follow-up, and make reordering effortless.';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href="https://ai.eemetro.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://ai.eemetro.com/" />
+    <meta name="theme-color" content="#175239" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23175239'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23E89B2E'%3EE%3C/text%3E%3C/svg%3E" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ProfessionalService',
+        name: 'EE Metro',
+        url: 'https://ai.eemetro.com/',
+        description,
+        areaServed: ['New York', 'New Jersey'],
+        knowsAbout: ['Revenue operations', 'Food manufacturing', 'Food distribution'],
+      })}
+    />
+  </head>
+
+  <body>
+    <!-- ============ NAV ============ -->
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="#top" aria-label="EE Metro home">
+          <span class="brand-mark">EE</span>
+          <span class="brand-text">METRO<small>digital sales systems</small></span>
+        </a>
+        <nav aria-label="Main">
+          <a href="#problem">The Problem</a>
+          <a href="#system">The System</a>
+          <a href="#roi">ROI</a>
+          <a href="#packages">Packages</a>
+        </nav>
+        <a class="btn btn-amber nav-cta" href={BOOK_URL}>Book a Call</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ============ HERO ============ -->
+      <section class="hero">
+        <div class="hero-media">
+          <Image
+            src={heroImg}
+            width={1600}
+            widths={[800, 1600]}
+            sizes="100vw"
+            format="webp"
+            quality={80}
+            alt="Fresh produce on a wholesale counter with a digital ordering and inventory data overlay"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="hero-scrim" aria-hidden="true"></div>
+        </div>
+        <div class="wrap hero-inner">
+          <p class="eyebrow">FOOD MANUFACTURERS &amp; DISTRIBUTORS · NY / NJ</p>
+          <h1>Your products move fast.<br />Your sales system should too.</h1>
+          <p class="lede">
+            We install the digital sales system behind your business: every inquiry captured, every
+            follow-up automatic, every reorder effortless. You keep making and moving great food —
+            the system keeps the orders coming.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-amber" href={BOOK_URL}>Book an Intro Call</a>
+            <a class="btn btn-ghost" href="#packages">See Packages</a>
+          </div>
+          <p class="hero-note mono">Built for bakeries, beverage brands, specialty importers &amp; wholesale distributors.</p>
+        </div>
+      </section>
+
+      <!-- ============ PROBLEM ============ -->
+      <section class="problem" id="problem">
+        <div class="wrap split">
+          <figure class="reveal">
+            <Image
+              src={problemImg}
+              width={1600}
+              widths={[800, 1600]}
+              sizes="(max-width: 900px) 100vw, 50vw"
+              format="webp"
+              quality={80}
+              alt="Purchasing manager on the phone holding a clipboard between warehouse racking"
+              loading="lazy"
+            />
+            <figcaption class="mono">Sound familiar? Orders by phone, follow-ups on paper.</figcaption>
+          </figure>
+          <div class="copy reveal">
+            <p class="eyebrow">THE PROBLEM</p>
+            <h2>Good product. Busy phones. Leaking pipeline.</h2>
+            <p>
+              Most food businesses we meet run sales the way they did fifteen years ago: inquiries on
+              voicemail, price sheets by fax or text, reorders that depend on somebody remembering to
+              call. Meanwhile buyers have changed — they research online, they expect an answer the
+              same day, and they reorder from whoever makes it easiest.
+            </p>
+            <ul class="ticks">
+              <li>Website inquiries that nobody answers for days</li>
+              <li>Follow-up that lives in one salesperson's head</li>
+              <li>Regular customers who quietly drift to a competitor</li>
+              <li>No numbers on what's working and what isn't</li>
+            </ul>
+            <p><strong>None of this is a people problem. It's a systems problem</strong> — and systems can be installed.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SYSTEM / PIPELINE ============ -->
+      <section class="system" id="system">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow">THE SYSTEM</p>
+            <h2>One pipeline, from first inquiry to standing reorder</h2>
+            <p class="sub">
+              We connect the pieces you already have — your website, your phones, your customer list —
+              into a single pipeline that never forgets to follow up.
+            </p>
+          </div>
+
+          <!-- Pipeline diagram (inline SVG, palette only) -->
+          <div class="pipeline reveal" role="img" aria-label="Pipeline diagram: inquiry captured, automatic follow-up, order confirmed, reorder scheduled">
+            <svg viewBox="0 0 920 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0 0L10 5L0 10z" fill="#E89B2E"></path>
+                </marker>
+              </defs>
+              <g font-family="'IBM Plex Mono', monospace" font-size="15" text-anchor="middle">
+                <rect x="10" y="55" width="200" height="70" rx="10" fill="#175239"></rect>
+                <text x="110" y="85" fill="#F7F6F2">INQUIRY</text>
+                <text x="110" y="107" fill="#F7F6F2">CAPTURED</text>
+
+                <line x1="215" y1="90" x2="245" y2="90" stroke="#E89B2E" stroke-width="3" marker-end="url(#arr)"></line>
+
+                <rect x="250" y="55" width="200" height="70" rx="10" fill="#175239"></rect>
+                <text x="350" y="85" fill="#F7F6F2">AUTOMATIC</text>
+                <text x="350" y="107" fill="#F7F6F2">FOLLOW-UP</text>
+
+                <line x1="455" y1="90" x2="485" y2="90" stroke="#E89B2E" stroke-width="3" marker-end="url(#arr)"></line>
+
+                <rect x="490" y="55" width="200" height="70" rx="10" fill="#175239"></rect>
+                <text x="590" y="85" fill="#F7F6F2">ORDER</text>
+                <text x="590" y="107" fill="#F7F6F2">CONFIRMED</text>
+
+                <line x1="695" y1="90" x2="725" y2="90" stroke="#E89B2E" stroke-width="3" marker-end="url(#arr)"></line>
+
+                <rect x="730" y="55" width="180" height="70" rx="10" fill="#0E3B27" stroke="#E89B2E" stroke-width="2"></rect>
+                <text x="820" y="85" fill="#E89B2E">REORDER</text>
+                <text x="820" y="107" fill="#E89B2E">SCHEDULED</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="grid3">
+            <article class="card reveal">
+              <h3>Capture</h3>
+              <p>Every call, form, and email lands in one place with the buyer's details — no more sticky notes, no more "who was supposed to call them back?"</p>
+            </article>
+            <article class="card reveal">
+              <h3>Convert</h3>
+              <p>Quotes, samples, and follow-ups go out on schedule, automatically. Your team steps in when a buyer is ready to talk, not to chase paperwork.</p>
+            </article>
+            <article class="card reveal">
+              <h3>Keep</h3>
+              <p>Standing orders, reorder reminders, and win-back outreach run in the background so your best accounts never quietly go cold.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOW IT WORKS ============ -->
+      <section class="how" id="how">
+        <div class="wrap split split-rev">
+          <div class="copy reveal">
+            <p class="eyebrow">HOW IT WORKS</p>
+            <h2>Installed in weeks, not quarters</h2>
+            <ol class="steps">
+              <li>
+                <span class="step-no mono">01</span>
+                <div>
+                  <h3>Audit</h3>
+                  <p>We map how orders actually reach you today — phone, email, walk-in, rep — and find where inquiries and reorders slip through.</p>
+                </div>
+              </li>
+              <li>
+                <span class="step-no mono">02</span>
+                <div>
+                  <h3>Install</h3>
+                  <p>We build your pipeline: lead capture, follow-up sequences, order and reorder workflows — connected to the tools your team already uses.</p>
+                </div>
+              </li>
+              <li>
+                <span class="step-no mono">03</span>
+                <div>
+                  <h3>Operate</h3>
+                  <p>We run and tune the system month over month, with plain-English reporting so you always know what it's producing.</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+          <figure class="reveal">
+            <Image
+              src={teamImg}
+              width={1600}
+              widths={[800, 1600]}
+              sizes="(max-width: 900px) 100vw, 50vw"
+              format="webp"
+              quality={80}
+              alt="Two warehouse workers in hard hats reviewing order sheets on clipboards"
+              loading="lazy"
+            />
+            <figcaption class="mono">Your operation, your process — systematized.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ============ ROI — PURCHASE ORDER ============ -->
+      <section class="roi" id="roi">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow eyebrow-light">WHAT IT'S WORTH</p>
+            <h2 class="on-dark">The math, written the way you already read it</h2>
+            <p class="sub on-dark">Illustrative month for a mid-size specialty distributor. Your audit gets real numbers.</p>
+          </div>
+
+          <div class="po reveal" id="po">
+            <header class="po-head">
+              <div>
+                <p class="po-brand">EE METRO · REVENUE OPERATIONS</p>
+                <p class="mono po-meta">DOC TYPE: WHOLESALE PURCHASE ORDER</p>
+              </div>
+              <div class="po-no">
+                <p class="mono">PO Nº <strong>00-2047</strong></p>
+                <p class="mono">TERMS: MONTHLY</p>
+              </div>
+            </header>
+
+            <table class="po-table">
+              <thead>
+                <tr>
+                  <th scope="col">LINE</th>
+                  <th scope="col">DESCRIPTION</th>
+                  <th scope="col" class="num">QTY / MO</th>
+                  <th scope="col" class="num">VALUE / MO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="mono">001</td>
+                  <td>Website &amp; phone inquiries captured (previously lost)</td>
+                  <td class="num mono"><span class="count" data-count="18">0</span></td>
+                  <td class="num mono">$<span class="count" data-count="7200">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">002</td>
+                  <td>Dormant accounts reactivated by win-back sequence</td>
+                  <td class="num mono"><span class="count" data-count="6">0</span></td>
+                  <td class="num mono">$<span class="count" data-count="9400">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">003</td>
+                  <td>Reorders placed on schedule (no chasing)</td>
+                  <td class="num mono"><span class="count" data-count="42">0</span></td>
+                  <td class="num mono">$<span class="count" data-count="15800">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">004</td>
+                  <td>Office hours returned from manual order entry</td>
+                  <td class="num mono"><span class="count" data-count="31">0</span> hrs</td>
+                  <td class="num mono">$<span class="count" data-count="1240">0</span></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3">ESTIMATED MONTHLY IMPACT</td>
+                  <td class="num mono total">$<span class="count" data-count="33640">0</span></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <footer class="po-foot mono">
+              <span>AUTHORIZED BY: YOUR NEXT QUARTER</span>
+              <span class="po-stamp">APPROVED</span>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PACKAGES ============ -->
+      <section class="packages" id="packages">
+        <div class="wrap">
+          <div class="pack-intro split">
+            <div class="copy reveal">
+              <p class="eyebrow">PACKAGES</p>
+              <h2>Start where you are. Grow into the rest.</h2>
+              <p class="sub">
+                Three levels, one direction: every tier is a working sales system, not a bundle of
+                marketing tasks. Move up when the volume justifies it.
+              </p>
+            </div>
+            <figure class="reveal">
+              <Image
+                src={breadImg}
+                width={1600}
+                widths={[800, 1600]}
+                sizes="(max-width: 900px) 100vw, 50vw"
+                format="webp"
+                quality={80}
+                alt="Loaves of bread moving down an automated bakery production line"
+                loading="lazy"
+              />
+              <figcaption class="mono">Production is systematized. Sales should be too.</figcaption>
+            </figure>
+          </div>
+
+          <div class="tiers">
+            <article class="tier reveal">
+              <h3>Starter Growth System</h3>
+              <p class="price mono">$500–$800<span>/month</span></p>
+              <p class="tier-for">For manufacturers, distributors, and food brands that need a professional online presence and a way to capture new business opportunities.</p>
+              <ul class="ticks">
+                <li>Professional website management</li>
+                <li>Search visibility fundamentals</li>
+                <li>Local business listing management</li>
+                <li>Monthly content updates</li>
+                <li>Social media management</li>
+                <li>Email newsletter</li>
+                <li>Lead capture forms &amp; automatic lead notifications</li>
+                <li>Lead source tracking &amp; basic reporting</li>
+                <li>Contact database organization</li>
+              </ul>
+              <p class="outcome"><strong>Outcome:</strong> generate more inquiries and stop losing leads that come through your website.</p>
+              <a class="btn btn-green" href={BOOK_URL}>Start Here</a>
+            </article>
+
+            <article class="tier tier-featured reveal">
+              <p class="flag mono">MOST POPULAR</p>
+              <h3>Growth Automation System</h3>
+              <p class="price mono">$1,500–$3,000<span>/month</span></p>
+              <p class="tier-for">For food companies that already have traffic and customers but need a system to consistently generate and nurture opportunities.</p>
+              <ul class="ticks">
+                <li>Everything in Starter</li>
+                <li>Advanced search visibility &amp; content marketing</li>
+                <li>Landing pages for products or distributors</li>
+                <li>CRM implementation and management</li>
+                <li>Automated lead routing &amp; lead scoring</li>
+                <li>Follow-up email and text sequences</li>
+                <li>Sales pipeline tracking</li>
+                <li>Appointment scheduling automation</li>
+                <li>Distributor &amp; customer segmentation</li>
+                <li>Performance dashboards &amp; monthly strategy reviews</li>
+              </ul>
+              <p class="outcome"><strong>Outcome:</strong> convert more prospects into customers while reducing manual sales follow-up.</p>
+              <a class="btn btn-amber" href={BOOK_URL}>Book an Intro Call</a>
+            </article>
+
+            <article class="tier reveal">
+              <h3>Revenue OS</h3>
+              <p class="price mono">$5,000+<span>/month</span></p>
+              <p class="tier-for">For established manufacturers, distributors, and multi-location food businesses that want a complete revenue infrastructure.</p>
+              <ul class="ticks">
+                <li>Everything in Growth</li>
+                <li>Customer &amp; distributor ordering portals</li>
+                <li>Reorder automation &amp; retention workflows</li>
+                <li>Customer lifetime value &amp; health scoring</li>
+                <li>Inventory-related workflow integrations</li>
+                <li>AI-powered customer support &amp; lead qualification</li>
+                <li>Executive revenue dashboards &amp; forecasting</li>
+                <li>Multi-brand / multi-location management</li>
+                <li>Custom integrations &amp; dedicated account management</li>
+              </ul>
+              <p class="outcome"><strong>Outcome:</strong> a scalable revenue operating system that increases orders, improves retention, and reduces administrative workload.</p>
+              <a class="btn btn-green" href={BOOK_URL}>Talk to Us</a>
+            </article>
+          </div>
+
+          <!-- Revenue OS portal mockup -->
+          <div class="portal-band split">
+            <div class="copy reveal">
+              <p class="eyebrow">INSIDE REVENUE OS</p>
+              <h2>Your customers order like it's 2026</h2>
+              <p>
+                Revenue OS includes a private ordering portal under your brand: your catalog, your
+                prices per account, one-click reorders from order history, and delivery-day cutoffs
+                built in. Buyers stop calling to ask "what did we get last time?" — it's on their
+                screen.
+              </p>
+              <ul class="ticks">
+                <li>Account-specific catalogs and pricing</li>
+                <li>One-click reorder from past invoices</li>
+                <li>Standing orders with delivery-day cutoffs</li>
+                <li>Every order flows straight into your pipeline</li>
+              </ul>
+            </div>
+            <div class="portal reveal" role="img" aria-label="Mockup of a branded wholesale ordering portal showing catalog items and a one-click reorder panel">
+              <div class="portal-chrome" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <p class="mono">orders.yourbrand.com</p>
+              </div>
+              <div class="portal-body" aria-hidden="true">
+                <aside class="portal-side">
+                  <p class="portal-logo">YOUR<br />BRAND</p>
+                  <p class="active">Create Order</p>
+                  <p>Order History</p>
+                  <p>Standing Orders</p>
+                  <p>Invoices</p>
+                </aside>
+                <div class="portal-main">
+                  <div class="portal-top mono">
+                    <span>NEXT DELIVERY: TUE</span>
+                    <span class="portal-cut">ORDER CUTOFF 6:00 PM</span>
+                  </div>
+                  <div class="portal-row">
+                    <span class="sw"></span>
+                    <div><p>Sourdough Boule · Case of 12</p><p class="mono sku">SKU 1042 · $38.40</p></div>
+                    <button type="button" tabindex="-1">Reorder</button>
+                  </div>
+                  <div class="portal-row">
+                    <span class="sw sw2"></span>
+                    <div><p>Cold Brew Concentrate · 4×1 gal</p><p class="mono sku">SKU 2210 · $64.00</p></div>
+                    <button type="button" tabindex="-1">Reorder</button>
+                  </div>
+                  <div class="portal-row">
+                    <span class="sw sw3"></span>
+                    <div><p>Imported Olive Oil · 6×750 ml</p><p class="mono sku">SKU 3307 · $89.50</p></div>
+                    <button type="button" tabindex="-1">Reorder</button>
+                  </div>
+                  <div class="portal-total mono">
+                    <span>3 ITEMS · $191.90</span>
+                    <span class="portal-place">PLACE ORDER →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FINAL CTA ============ -->
+      <section class="final" id="book" style={`background-image: linear-gradient(rgba(14,59,39,.94), rgba(14,59,39,.96)), url(${spiceBg.src});`}>
+        <div class="wrap center-head">
+          <p class="eyebrow eyebrow-light reveal">NEXT STEP</p>
+          <h2 class="on-dark reveal">Twenty minutes. Your numbers. A straight answer.</h2>
+          <p class="sub on-dark reveal">
+            Bring your current order flow — we'll tell you exactly where it leaks and what a system
+            would return. If the math doesn't work, we'll say so.
+          </p>
+          <div class="cta-row center reveal">
+            <a class="btn btn-amber btn-lg" href={BOOK_URL}>Book an Intro Call</a>
+          </div>
+          <p class="mono final-note reveal">SERVING FOOD MANUFACTURERS &amp; DISTRIBUTORS ACROSS NEW YORK &amp; NEW JERSEY</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-inner">
+        <p><strong>EE METRO</strong> · Digital sales systems for the food industry</p>
+        <p class="mono">NEW YORK · NEW JERSEY</p>
+      </div>
+    </footer>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script>
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Scroll reveal
+      const revealEls = document.querySelectorAll('.reveal');
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        revealEls.forEach((el) => el.classList.add('in-view'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in-view');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.15 }
+        );
+        revealEls.forEach((el) => io.observe(el));
+      }
+
+      // Count-up numbers in the purchase order
+      const fmt = (n) => n.toLocaleString('en-US');
+      const counters = document.querySelectorAll('.count');
+      const setFinal = (el) => (el.textContent = fmt(Number(el.dataset.count)));
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        counters.forEach(setFinal);
+      } else {
+        const animate = (el) => {
+          const target = Number(el.dataset.count);
+          const dur = 1200;
+          const t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = fmt(Math.round(target * eased));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+        const co = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                animate(e.target);
+                co.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.6 }
+        );
+        counters.forEach((el) => co.observe(el));
+      }
+    </script>
+
+    <!-- ============ STYLES ============ -->
+    <style>
+      :global(*, *::before, *::after) { box-sizing: border-box; }
+      :global(html) { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        :global(html) { scroll-behavior: auto; }
+      }
+      :global(body) {
+        margin: 0;
+        font-family: 'Figtree Variable', system-ui, sans-serif;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #1e2a24;
+        background: #f7f6f2;
+      }
+      :global(img) { max-width: 100%; height: auto; display: block; }
+
+      h1, h2, h3 { font-family: 'Archivo Variable', system-ui, sans-serif; line-height: 1.15; margin: 0 0 0.5em; }
+      h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 700; }
+      h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 700; }
+      h3 { font-size: 1.25rem; font-weight: 650; }
+      p { margin: 0 0 1em; }
+
+      .mono { font-family: 'IBM Plex Mono', monospace; }
+      .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+      .eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.12em;
+        color: #175239;
+        margin-bottom: 0.9em;
+      }
+      .eyebrow-light { color: #e89b2e; }
+      .on-dark { color: #f7f6f2; }
+      .sub { max-width: 46rem; }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 0.85rem 1.6rem;
+        border-radius: 8px;
+        font-weight: 650;
+        font-family: 'Archivo Variable', system-ui, sans-serif;
+        text-decoration: none;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(30, 42, 36, 0.18); }
+      .btn-amber { background: #e89b2e; color: #0e3b27; }
+      .btn-green { background: #175239; color: #f7f6f2; }
+      .btn-ghost { border: 2px solid #f7f6f2; color: #f7f6f2; }
+      .btn-lg { padding: 1.05rem 2.2rem; font-size: 1.1rem; }
+      @media (prefers-reduced-motion: reduce) {
+        .btn { transition: none; }
+        .btn:hover { transform: none; }
+      }
+
+      /* Nav */
+      .nav {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(247, 246, 242, 0.96);
+        border-bottom: 1px solid rgba(23, 82, 57, 0.15);
+        backdrop-filter: blur(6px);
+      }
+      .nav-inner { display: flex; align-items: center; gap: 2rem; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+      .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: #1e2a24; }
+      .brand-mark {
+        background: #175239; color: #e89b2e;
+        font-family: 'Archivo Variable', sans-serif; font-weight: 800;
+        padding: 0.35rem 0.55rem; border-radius: 8px; font-size: 1.05rem;
+      }
+      .brand-text { font-family: 'Archivo Variable', sans-serif; font-weight: 800; letter-spacing: 0.06em; line-height: 1.1; }
+      .brand-text small { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; font-weight: 400; letter-spacing: 0.08em; color: #175239; }
+      .nav nav { display: flex; gap: 1.4rem; margin-left: auto; }
+      .nav nav a { color: #1e2a24; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+      .nav nav a:hover { color: #175239; text-decoration: underline; text-underline-offset: 4px; }
+      .nav-cta { padding: 0.6rem 1.2rem; white-space: nowrap; }
+      @media (max-width: 900px) {
+        .nav nav { display: none; }
+        .nav-cta { margin-left: auto; }
+      }
+
+      /* Hero */
+      .hero { position: relative; color: #f7f6f2; overflow: hidden; }
+      .hero-media, .hero-media :global(img) {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover;
+      }
+      .hero-scrim {
+        position: absolute; inset: 0;
+        background: linear-gradient(100deg, rgba(14, 59, 39, 0.93) 0%, rgba(14, 59, 39, 0.82) 45%, rgba(23, 82, 57, 0.55) 100%);
+      }
+      .hero-inner { position: relative; padding-top: clamp(4.5rem, 10vw, 8rem); padding-bottom: clamp(4.5rem, 10vw, 8rem); max-width: 1160px; }
+      .hero .eyebrow { color: #e89b2e; }
+      .hero .lede { font-size: 1.15rem; max-width: 38rem; }
+      .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.6rem 0 1.2rem; }
+      .cta-row.center { justify-content: center; }
+      .hero-note { font-size: 0.8rem; letter-spacing: 0.05em; opacity: 0.85; }
+
+      /* Split layouts */
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+      .split > * { min-width: 0; }
+      @media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 1.8rem; } }
+      .split figure { margin: 0; }
+      .split figure :global(img) { border-radius: 14px; box-shadow: 0 10px 30px rgba(30, 42, 36, 0.15); }
+      figcaption { font-size: 0.78rem; color: #175239; margin-top: 0.7rem; letter-spacing: 0.04em; }
+      @media (max-width: 900px) { .split-rev figure { order: -1; } }
+
+      section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+      .problem { background: #f7f6f2; }
+
+      /* System */
+      .system { background: #eee9df; }
+      .center-head { text-align: center; max-width: 52rem; margin: 0 auto 2.5rem; }
+      .center-head .sub { margin-left: auto; margin-right: auto; }
+      .pipeline { max-width: 940px; margin: 0 auto 3rem; overflow-x: auto; }
+      .pipeline svg { min-width: 700px; width: 100%; height: auto; display: block; }
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+      @media (max-width: 900px) { .grid3 { grid-template-columns: 1fr; } }
+      .card { background: #f7f6f2; border-radius: 14px; padding: 1.6rem; border: 1px solid rgba(23, 82, 57, 0.12); }
+      .card h3 { color: #175239; }
+      .card p { margin: 0; }
+
+      /* Steps */
+      .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; }
+      .steps li { display: flex; gap: 1.1rem; align-items: flex-start; }
+      .steps h3 { margin-bottom: 0.25em; }
+      .steps p { margin: 0; }
+      .step-no {
+        flex: 0 0 auto; background: #175239; color: #e89b2e;
+        border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 1rem; font-weight: 500;
+      }
+
+      /* Ticks */
+      .ticks { list-style: none; padding: 0; margin: 0 0 1.2em; display: grid; gap: 0.5rem; }
+      .ticks li { padding-left: 1.7rem; position: relative; }
+      .ticks li::before {
+        content: '✓'; position: absolute; left: 0; top: 0;
+        color: #e89b2e; font-weight: 800;
+      }
+
+      /* ROI purchase order */
+      .roi { background: #0e3b27; }
+      .po {
+        background: #f7f6f2; max-width: 860px; margin: 0 auto;
+        border-radius: 6px; padding: clamp(1.2rem, 3vw, 2.4rem);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        border-top: 10px solid #e89b2e;
+      }
+      .po-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 2px solid #1e2a24; padding-bottom: 1rem; margin-bottom: 0.4rem; }
+      .po-brand { font-family: 'Archivo Variable', sans-serif; font-weight: 800; letter-spacing: 0.05em; margin: 0; }
+      .po-meta, .po-no p { font-size: 0.8rem; margin: 0.2em 0; letter-spacing: 0.06em; }
+      .po-no { text-align: right; }
+      .po-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+      .po-table th {
+        font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 0.75rem;
+        letter-spacing: 0.1em; text-align: left; padding: 0.8rem 0.5rem;
+        border-bottom: 1px solid rgba(30, 42, 36, 0.4);
+      }
+      .po-table td { padding: 0.85rem 0.5rem; border-bottom: 1px dashed rgba(30, 42, 36, 0.25); vertical-align: top; }
+      .po-table .num, .po-table th.num { text-align: right; white-space: nowrap; }
+      .po-table tfoot td {
+        border-bottom: none; border-top: 2px solid #1e2a24;
+        font-family: 'IBM Plex Mono', monospace; font-weight: 500; letter-spacing: 0.08em;
+        padding-top: 1rem; font-size: 0.9rem;
+      }
+      .po-table .total { font-size: 1.35rem; color: #175239; font-weight: 600; }
+      .po-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 1.4rem; font-size: 0.75rem; letter-spacing: 0.08em; }
+      .po-stamp {
+        border: 3px solid #175239; color: #175239; padding: 0.3rem 0.9rem;
+        border-radius: 6px; font-weight: 600; transform: rotate(-4deg); font-size: 0.9rem;
+      }
+      @media (max-width: 640px) {
+        .po-table thead { display: none; }
+        .po-table, .po-table tbody, .po-table tr, .po-table td, .po-table tfoot { display: block; }
+        .po-table td { border: none; padding: 0.2rem 0; }
+        .po-table td.mono:first-child { color: #175239; font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 0.9rem; }
+        .po-table .num { text-align: left; }
+        .po-table tr { border-bottom: 1px dashed rgba(30, 42, 36, 0.25); padding: 0.4rem 0; }
+        .po-table tfoot tr { border-bottom: none; }
+      }
+
+      /* Packages */
+      .packages { background: #f7f6f2; }
+      .pack-intro { margin-bottom: 3rem; }
+      .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+      @media (max-width: 1000px) { .tiers { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; } }
+      .tier {
+        background: #fff; border: 1px solid rgba(23, 82, 57, 0.15); border-radius: 16px;
+        padding: 1.8rem; display: flex; flex-direction: column; gap: 0.4rem;
+      }
+      .tier .btn { align-self: flex-start; margin-top: 0.8rem; }
+      .tier-featured { border: 2px solid #e89b2e; box-shadow: 0 14px 40px rgba(30, 42, 36, 0.12); position: relative; }
+      .flag {
+        position: absolute; top: -0.8rem; left: 1.6rem;
+        background: #e89b2e; color: #0e3b27; font-size: 0.72rem; letter-spacing: 0.1em;
+        padding: 0.25rem 0.7rem; border-radius: 6px; margin: 0; font-weight: 500;
+      }
+      .price { font-size: 1.5rem; color: #175239; font-weight: 600; margin: 0 0 0.6em; }
+      .price span { font-size: 0.85rem; color: #1e2a24; opacity: 0.7; }
+      .tier-for { font-size: 0.95rem; opacity: 0.85; }
+      .tier .ticks { font-size: 0.95rem; }
+      .outcome { font-size: 0.95rem; background: #eee9df; border-radius: 10px; padding: 0.8rem 1rem; }
+
+      /* Portal mockup */
+      .portal-band { margin-top: 4rem; }
+      .portal {
+        background: #0e3b27; border-radius: 16px; padding: 0.9rem;
+        box-shadow: 0 18px 50px rgba(30, 42, 36, 0.28);
+      }
+      .portal-chrome { display: flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.4rem 0.7rem; }
+      .portal-chrome span { width: 10px; height: 10px; border-radius: 50%; background: rgba(247, 246, 242, 0.35); }
+      .portal-chrome p { margin: 0 auto; color: rgba(247, 246, 242, 0.7); font-size: 0.72rem; letter-spacing: 0.06em; }
+      .portal-body { display: grid; grid-template-columns: 130px 1fr; background: #f7f6f2; border-radius: 10px; overflow: hidden; min-height: 300px; }
+      .portal-side { background: #175239; color: #f7f6f2; padding: 1rem 0.9rem; font-size: 0.8rem; }
+      .portal-side p { margin: 0 0 0.7rem; opacity: 0.75; }
+      .portal-side .active { opacity: 1; color: #e89b2e; font-weight: 700; }
+      .portal-logo { font-family: 'Archivo Variable', sans-serif; font-weight: 800; letter-spacing: 0.08em; line-height: 1.2; margin-bottom: 1.4rem !important; opacity: 1 !important; }
+      .portal-main { padding: 0.9rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+      .portal-top { display: flex; justify-content: space-between; font-size: 0.68rem; letter-spacing: 0.06em; color: #175239; }
+      .portal-cut { color: #b06900; }
+      .portal-row {
+        display: grid; grid-template-columns: 34px 1fr auto; gap: 0.7rem; align-items: center;
+        background: #fff; border: 1px solid rgba(23, 82, 57, 0.14); border-radius: 8px; padding: 0.55rem 0.7rem;
+      }
+      .portal-row p { margin: 0; font-size: 0.82rem; font-weight: 600; }
+      .portal-row .sku { font-size: 0.68rem; font-weight: 400; color: #175239; }
+      .portal-row button {
+        font-family: 'Archivo Variable', sans-serif; font-weight: 700; font-size: 0.72rem;
+        background: #175239; color: #f7f6f2; border: none; border-radius: 6px; padding: 0.45rem 0.8rem;
+        pointer-events: none;
+      }
+      .sw { width: 34px; height: 34px; border-radius: 7px; background: #e89b2e; }
+      .sw2 { background: #175239; }
+      .sw3 { background: #0e3b27; }
+      .portal-total { display: flex; justify-content: space-between; font-size: 0.75rem; letter-spacing: 0.05em; margin-top: 0.2rem; padding: 0.5rem 0.2rem 0; color: #1e2a24; flex-wrap: wrap; gap: 0.5rem; }
+      .portal-top { flex-wrap: wrap; gap: 0.3rem; }
+      @media (max-width: 480px) {
+        .portal-body { grid-template-columns: 1fr; }
+        .portal-side { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; padding: 0.8rem 0.9rem; }
+        .portal-side p { margin: 0; }
+        .portal-logo { width: 100%; margin-bottom: 0.2rem !important; }
+      }
+      .portal-place { color: #0e3b27; background: #e89b2e; padding: 0.35rem 0.7rem; border-radius: 6px; font-weight: 600; }
+
+      /* Final CTA */
+      .final {
+        background-color: #0e3b27;
+        background-size: cover;
+        background-position: center;
+        color: #f7f6f2;
+      }
+      .final .center-head { margin-bottom: 0; }
+      .final-note { font-size: 0.75rem; letter-spacing: 0.12em; opacity: 0.8; margin-top: 2rem; }
+
+      /* Footer */
+      .foot { background: #1e2a24; color: #f7f6f2; padding: 1.6rem 0; }
+      .foot-inner { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: center; }
+      .foot p { margin: 0; font-size: 0.9rem; }
+      .foot .mono { font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.8; }
+
+      /* Reveal animation (subtle; disabled under reduced motion) */
+      .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+      .reveal.in-view { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal { opacity: 1; transform: none; transition: none; }
+      }
+    </style>
+  </body>
+</html>
