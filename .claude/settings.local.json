@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"STAR LLC\" -Force | Select-Object Name; Write-Output \"---desktop---\"; Get-ChildItem $env:USERPROFILE\\\\Desktop -Directory | Select-Object Name)",
+      "PowerShell($roots = @\\(\"$env:USERPROFILE\\\\Documents\", \"$env:USERPROFILE\\\\Desktop\", \"$env:USERPROFILE\\\\projects\", \"$env:USERPROFILE\\\\source\", \"$env:USERPROFILE\\\\dev\", \"C:\\\\dev\", \"C:\\\\projects\", \"$env:USERPROFILE\"\\); foreach \\($r in $roots\\) { if \\(Test-Path $r\\) { Get-ChildItem $r -Directory -ErrorAction SilentlyContinue | Where-Object { Test-Path \\(Join-Path $_.FullName 'astro.config.mjs'\\) -ErrorAction SilentlyContinue } | Select-Object FullName } }; Write-Output \"---any astro config anywhere shallow---\"; Get-ChildItem $env:USERPROFILE -Directory | Select-Object Name)",
+      "PowerShell(foreach \\($p in @\\(\"C:\\\\Program Files\\\\nodejs\\\\node.exe\", \"C:\\\\Program Files \\(x86\\)\\\\nodejs\\\\node.exe\", \"$env:LOCALAPPDATA\\\\Programs\\\\nodejs\\\\node.exe\", \"$env:APPDATA\\\\nvm\", \"$env:LOCALAPPDATA\\\\fnm\", \"$env:LOCALAPPDATA\\\\Volta\"\\)\\) { if \\(Test-Path $p\\) { Write-Output \"FOUND: $p\" } }; winget list --id OpenJS.NodeJS 2>$null | Select-Object -First 10)",
+      "Read(//c/Users/stejada/AppData/Local/Temp/claude/C--Users-stejada-Desktop-STAR-LLC-20260622T180412Z-3-001/271ecf12-2017-45fc-91ae-1bab68fe9d94/scratchpad/**)",
+      "Bash(curl -sL -o node.zip https://nodejs.org/dist/v24.18.0/node-v24.18.0-win-x64.zip)",
+      "Bash(unzip -q node.zip)",
+      "Bash(./node-v24.18.0-win-x64/node.exe --version)",
+      "Bash(./node-v24.18.0-win-x64/npm.cmd --version)",
+      "PowerShell($src = \"C:\\\\Users\\\\stejada\\\\Desktop\\\\STAR LLC-20260622T180412Z-3-001\"; $dst = \"$src\\\\eemetro-site\\\\src\\\\assets\"; New-Item -ItemType Directory -Force $dst | Out-Null; Copy-Item \"$src\\\\ai crm eemetro \\(9\\).jpeg\" \"$dst\\\\hero-produce-data.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(6\\).jpeg\" \"$dst\\\\purchasing-manager-warehouse.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(2\\).jpeg\" \"$dst\\\\bread-production-line.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(7\\).jpeg\" \"$dst\\\\warehouse-team-clipboards.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(1\\).jpeg\" \"$dst\\\\spice-world-map.jpg\"; Get-ChildItem $dst | Select-Object Name, Length)"
+    ]
+  }
+}
