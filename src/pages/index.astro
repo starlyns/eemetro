@@ -3,6 +3,11 @@
 // Single-page landing. Pure static output, no client frameworks.
 const BOOK_URL = '#book'; // placeholder — set the real booking link before launch
 
+// Contact + platform
+const PHONE = '(646) 580-2939';
+const PHONE_HREF = 'tel:+16465802939';
+const PLATFORM_URL = 'https://ai.eemetro.com';
+
 import { Image, getImage } from 'astro:assets';
 import '@fontsource-variable/archivo';
 import '@fontsource-variable/figtree';
@@ -29,11 +34,11 @@ const description =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href="https://ai.eemetro.com/" />
+    <link rel="canonical" href="https://eemetro.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content="https://ai.eemetro.com/" />
+    <meta property="og:url" content="https://eemetro.com/" />
     <meta name="theme-color" content="#175239" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23175239'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23E89B2E'%3EE%3C/text%3E%3C/svg%3E" />
     <script
@@ -42,7 +47,8 @@ const description =
         '@context': 'https://schema.org',
         '@type': 'ProfessionalService',
         name: 'EE Metro',
-        url: 'https://ai.eemetro.com/',
+        url: 'https://eemetro.com/',
+        telephone: '+1-646-580-2939',
         description,
         areaServed: ['New York', 'New Jersey'],
         knowsAbout: ['Revenue operations', 'Food manufacturing', 'Food distribution'],
@@ -64,6 +70,10 @@ const description =
           <a href="#roi">ROI</a>
           <a href="#packages">Packages</a>
         </nav>
+        <a class="nav-phone" href={PHONE_HREF} aria-label={`Call EE Metro at ${PHONE}`}>
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"></path></svg>
+          <span>{PHONE}</span>
+        </a>
         <a class="btn btn-amber nav-cta" href={BOOK_URL}>Book a Call</a>
       </div>
     </header>
@@ -97,6 +107,7 @@ const description =
             <a class="btn btn-amber" href={BOOK_URL}>Book an Intro Call</a>
             <a class="btn btn-ghost" href="#packages">See Packages</a>
           </div>
+          <p class="hero-call">or call <a href={PHONE_HREF}>{PHONE}</a> — talk to a person today.</p>
           <p class="hero-note mono">Built for bakeries, beverage brands, specialty importers &amp; wholesale distributors.</p>
         </div>
       </section>
@@ -348,7 +359,7 @@ const description =
           <div class="tiers">
             <article class="tier reveal">
               <h3>Starter Growth System</h3>
-              <p class="price mono">$500–$800<span>/month</span></p>
+              <p class="price mono">$1,200<span>/month</span></p>
               <p class="tier-for">For manufacturers, distributors, and food brands that need a professional online presence and a way to capture new business opportunities.</p>
               <ul class="ticks">
                 <li>Professional website management</li>
@@ -368,7 +379,7 @@ const description =
             <article class="tier tier-featured reveal">
               <p class="flag mono">MOST POPULAR</p>
               <h3>Growth Automation System</h3>
-              <p class="price mono">$1,500–$3,000<span>/month</span></p>
+              <p class="price mono">$2,500<span>/month</span></p>
               <p class="tier-for">For food companies that already have traffic and customers but need a system to consistently generate and nurture opportunities.</p>
               <ul class="ticks">
                 <li>Everything in Starter</li>
@@ -388,7 +399,7 @@ const description =
 
             <article class="tier reveal">
               <h3>Revenue OS</h3>
-              <p class="price mono">$5,000+<span>/month</span></p>
+              <p class="price mono">$5,000<span>/month</span></p>
               <p class="tier-for">For established manufacturers, distributors, and multi-location food businesses that want a complete revenue infrastructure.</p>
               <ul class="ticks">
                 <li>Everything in Growth</li>
@@ -488,6 +499,10 @@ const description =
     <footer class="foot">
       <div class="wrap foot-inner">
         <p><strong>EE METRO</strong> · Digital sales systems for the food industry</p>
+        <p class="foot-contact">
+          <a href={PHONE_HREF}>{PHONE}</a>
+          <a href={PLATFORM_URL}>Client Login</a>
+        </p>
         <p class="mono">NEW YORK · NEW JERSEY</p>
       </div>
     </footer>
@@ -626,9 +641,17 @@ const description =
       .nav nav a { color: #1e2a24; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
       .nav nav a:hover { color: #175239; text-decoration: underline; text-underline-offset: 4px; }
       .nav-cta { padding: 0.6rem 1.2rem; white-space: nowrap; }
+      .nav-phone {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        color: #175239; text-decoration: none; white-space: nowrap;
+        font-family: 'Archivo Variable', sans-serif; font-weight: 700; font-size: 0.95rem;
+      }
+      .nav-phone svg { flex: 0 0 auto; }
+      .nav-phone:hover { color: #0e3b27; text-decoration: underline; text-underline-offset: 3px; }
       @media (max-width: 900px) {
         .nav nav { display: none; }
-        .nav-cta { margin-left: auto; }
+        .nav-phone { margin-left: auto; }
+        .nav-cta { display: none; }
       }
 
       /* Hero */
@@ -646,6 +669,9 @@ const description =
       .hero .lede { font-size: 1.15rem; max-width: 38rem; }
       .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.6rem 0 1.2rem; }
       .cta-row.center { justify-content: center; }
+      .hero-call { margin: 0 0 1.1rem; font-size: 1rem; color: #f7f6f2; }
+      .hero-call a { color: #e89b2e; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .hero-call a:hover { text-decoration: underline; text-underline-offset: 3px; }
       .hero-note { font-size: 0.8rem; letter-spacing: 0.05em; opacity: 0.85; }
 
       /* Split layouts */
@@ -808,6 +834,9 @@ const description =
       .foot { background: #1e2a24; color: #f7f6f2; padding: 1.6rem 0; }
       .foot-inner { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: center; }
       .foot p { margin: 0; font-size: 0.9rem; }
+      .foot-contact { display: flex; gap: 1.4rem; align-items: center; }
+      .foot-contact a { color: #f7f6f2; text-decoration: none; font-weight: 600; }
+      .foot-contact a:hover { color: #e89b2e; text-decoration: underline; text-underline-offset: 3px; }
       .foot .mono { font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.8; }
 
       /* Reveal animation (subtle; disabled under reduced motion) */
