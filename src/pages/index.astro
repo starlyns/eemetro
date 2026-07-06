@@ -57,6 +57,7 @@ const description =
   </head>
 
   <body>
+    <div class="scroll-progress" aria-hidden="true"></div>
     <!-- ============ NAV ============ -->
     <header class="nav">
       <div class="wrap nav-inner">
@@ -80,8 +81,8 @@ const description =
 
     <main id="top">
       <!-- ============ HERO ============ -->
-      <section class="hero">
-        <div class="hero-media">
+      <section class="hero" id="hero">
+        <div class="hero-media" data-parallax="0.08">
           <Image
             src={heroImg}
             width={1600}
@@ -95,7 +96,13 @@ const description =
           />
           <div class="hero-scrim" aria-hidden="true"></div>
         </div>
-        <div class="wrap hero-inner">
+        <div class="hero-aurora" aria-hidden="true" data-depth="10">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+          <span class="hero-grid"></span>
+        </div>
+        <div class="wrap hero-inner" data-depth="4">
           <p class="eyebrow">FOOD MANUFACTURERS &amp; DISTRIBUTORS · NY / NJ</p>
           <h1>Your products move fast.<br />Your sales system should too.</h1>
           <p class="lede">
@@ -510,10 +517,21 @@ const description =
     <!-- ============ SCRIPTS ============ -->
     <script>
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const hasIO = 'IntersectionObserver' in window;
 
-      // Scroll reveal
+      // Scroll reveal — with per-group stagger
       const revealEls = document.querySelectorAll('.reveal');
-      if (reduceMotion || !('IntersectionObserver' in window)) {
+      const groups = new Map();
+      revealEls.forEach((el) => {
+        const p = el.parentElement;
+        const arr = groups.get(p) || [];
+        arr.push(el);
+        groups.set(p, arr);
+      });
+      groups.forEach((arr) => {
+        if (arr.length > 1) arr.forEach((el, i) => el.style.setProperty('--reveal-delay', i * 90 + 'ms'));
+      });
+      if (reduceMotion || !hasIO) {
         revealEls.forEach((el) => el.classList.add('in-view'));
       } else {
         const io = new IntersectionObserver(
@@ -562,6 +580,92 @@ const description =
           { threshold: 0.6 }
         );
         counters.forEach((el) => co.observe(el));
+      }
+
+      // ============ RICH MOTION (skipped entirely under reduced-motion) ============
+      if (!reduceMotion) {
+        const root = document.documentElement;
+
+        /* Parallax targets: explicit [data-parallax] + section figures */
+        const parallaxEls = [];
+        document.querySelectorAll('[data-parallax]').forEach((el) =>
+          parallaxEls.push({ el, speed: parseFloat(el.dataset.parallax) || 0.12 })
+        );
+        document.querySelectorAll('.split figure').forEach((el) =>
+          parallaxEls.push({ el, speed: 0.06 })
+        );
+
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const scrollable = root.scrollHeight - root.clientHeight;
+            const y = window.scrollY || root.scrollTop || 0;
+            root.style.setProperty('--sp', scrollable > 0 ? y / scrollable : 0);
+            const vh = window.innerHeight;
+            for (const { el, speed } of parallaxEls) {
+              const r = el.getBoundingClientRect();
+              const center = r.top + r.height / 2 - vh / 2;
+              el.style.transform = 'translate3d(0,' + (-center * speed).toFixed(1) + 'px,0)';
+            }
+            ticking = false;
+          });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        onScroll();
+
+        /* Hero pointer parallax (aurora field + content shift for depth) */
+        const hero = document.querySelector('.hero');
+        const depthEls = hero ? hero.querySelectorAll('[data-depth]') : [];
+        if (hero && depthEls.length) {
+          hero.addEventListener('pointermove', (ev) => {
+            const r = hero.getBoundingClientRect();
+            const dx = (ev.clientX - r.left) / r.width - 0.5;
+            const dy = (ev.clientY - r.top) / r.height - 0.5;
+            depthEls.forEach((el) => {
+              const d = parseFloat(el.dataset.depth) || 0;
+              el.style.transform =
+                'translate3d(' + (-dx * d).toFixed(2) + 'px,' + (-dy * d).toFixed(2) + 'px,0)';
+            });
+          });
+          hero.addEventListener('pointerleave', () => {
+            depthEls.forEach((el) => (el.style.transform = ''));
+          });
+        }
+
+        /* 3D tilt on cards (pointer-driven rotate + glare) */
+        const tiltEls = document.querySelectorAll('.tier, .card, .po');
+        tiltEls.forEach((el) => {
+          el.classList.add('tilt');
+          el.addEventListener('pointermove', (ev) => {
+            const r = el.getBoundingClientRect();
+            const px = (ev.clientX - r.left) / r.width;
+            const py = (ev.clientY - r.top) / r.height;
+            el.style.setProperty('--ry', ((px - 0.5) * 9).toFixed(2) + 'deg');
+            el.style.setProperty('--rx', ((0.5 - py) * 9).toFixed(2) + 'deg');
+            el.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+            el.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+            el.classList.add('is-tilting');
+          });
+          el.addEventListener('pointerleave', () => {
+            el.style.removeProperty('--rx');
+            el.style.removeProperty('--ry');
+            el.classList.remove('is-tilting');
+          });
+        });
+
+        /* Flowing pipeline connectors + floating portal */
+        document.querySelectorAll('.pipeline svg line').forEach((l) => l.classList.add('pipe-flow'));
+        const portal = document.querySelector('.portal');
+        if (portal) portal.classList.add('float-soft');
+
+        /* Directional reveals for two-column sections */
+        document.querySelectorAll('.split').forEach((sp) => {
+          const cols = Array.from(sp.children).filter((c) => c.classList.contains('reveal'));
+          cols.forEach((c, i) => c.classList.add(i === 0 ? 'r-left' : 'r-right'));
+        });
       }
     </script>
 
@@ -656,7 +760,8 @@ const description =
 
       /* Hero */
       .hero { position: relative; color: #f7f6f2; overflow: hidden; }
-      .hero-media, .hero-media :global(img) {
+      .hero-media { position: absolute; inset: -12% 0; will-change: transform; }
+      .hero-media :global(img) {
         position: absolute; inset: 0; width: 100%; height: 100%;
         object-fit: cover;
       }
@@ -839,11 +944,119 @@ const description =
       .foot-contact a:hover { color: #e89b2e; text-decoration: underline; text-underline-offset: 3px; }
       .foot .mono { font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.8; }
 
-      /* Reveal animation (subtle; disabled under reduced motion) */
-      .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
-      .reveal.in-view { opacity: 1; transform: none; }
+      /* ============================================================
+         MOTION & EFFECTS SYSTEM  (palette-locked; degrades gracefully)
+         ============================================================ */
+
+      /* Scroll-reveal — directional + staggered */
+      .reveal {
+        opacity: 0; transform: translateY(34px);
+        transition: opacity 0.7s cubic-bezier(.22,.61,.36,1),
+                    transform 0.7s cubic-bezier(.22,.61,.36,1);
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform;
+      }
+      .reveal.r-left  { transform: translateX(-46px); }
+      .reveal.r-right { transform: translateX(46px); }
+      .reveal.r-scale { transform: scale(.9); }
+      .reveal.r-blur  { filter: blur(10px); }
+      .reveal.in-view { opacity: 1; transform: none; filter: none; }
+
+      /* Scroll progress bar */
+      .scroll-progress {
+        position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+        transform: scaleX(var(--sp, 0)); transform-origin: 0 50%;
+        background: linear-gradient(90deg, #175239, #e89b2e);
+        z-index: 100; pointer-events: none;
+      }
+
+      /* Hero: 3D aurora background */
+      .hero { perspective: 1200px; }
+      .hero-aurora {
+        position: absolute; inset: 0; z-index: 1; overflow: hidden;
+        pointer-events: none; transform-style: preserve-3d;
+      }
+      .hero-aurora .blob {
+        position: absolute; border-radius: 50%; filter: blur(60px);
+        opacity: .55; mix-blend-mode: screen; will-change: transform;
+        animation: blobFloat 18s ease-in-out infinite;
+      }
+      .hero-aurora .b1 { width: 46vw; height: 46vw; left: -6vw; top: -10vw;
+        background: radial-gradient(circle at 30% 30%, #2f8f63, #175239 60%, transparent 72%); }
+      .hero-aurora .b2 { width: 40vw; height: 40vw; right: -8vw; top: 6vw;
+        background: radial-gradient(circle at 60% 40%, #e89b2e, #b06900 55%, transparent 72%);
+        opacity: .42; animation-duration: 22s; animation-delay: -6s; }
+      .hero-aurora .b3 { width: 34vw; height: 34vw; left: 30vw; bottom: -14vw;
+        background: radial-gradient(circle at 50% 50%, #3aa172, #0e3b27 60%, transparent 74%);
+        animation-duration: 26s; animation-delay: -12s; }
+      .hero-grid {
+        position: absolute; inset: -2px; opacity: .16;
+        background-image:
+          linear-gradient(rgba(247,246,242,.25) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(247,246,242,.25) 1px, transparent 1px);
+        background-size: 46px 46px;
+        mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+        animation: gridDrift 40s linear infinite;
+      }
+      .hero-inner { z-index: 2; }
+      @keyframes blobFloat {
+        0%,100% { transform: translate3d(0,0,0) scale(1); }
+        33%     { transform: translate3d(3vw,-2vw,0) scale(1.08); }
+        66%     { transform: translate3d(-2vw,2vw,0) scale(.96); }
+      }
+      @keyframes gridDrift { to { background-position: 46px 46px, 46px 46px; } }
+
+      /* 3D tilt cards (JS adds --rx/--ry/--gx/--gy on pointer) */
+      .tilt {
+        transform: perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(0);
+        transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease, opacity .7s ease;
+        transform-style: preserve-3d; position: relative;
+      }
+      .tilt::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background: radial-gradient(240px circle at var(--gx,50%) var(--gy,0%),
+                    rgba(247,246,242,.35), transparent 60%);
+        opacity: 0; transition: opacity .3s ease; pointer-events: none; z-index: 3;
+      }
+      .tilt.is-tilting { box-shadow: 0 26px 60px rgba(14,59,39,.28); }
+      .tilt.is-tilting::after { opacity: 1; }
+
+      /* Advanced buttons — sheen sweep + lift + press */
+      .btn { position: relative; overflow: hidden; isolation: isolate; }
+      .btn::before {
+        content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+        background: linear-gradient(100deg, transparent, rgba(247,246,242,.55), transparent);
+        transform: skewX(-18deg); transition: left .6s ease; z-index: 1;
+      }
+      .btn:hover::before { left: 140%; }
+      .btn:active { transform: translateY(0) scale(.98); }
+      .btn-amber { box-shadow: 0 6px 18px rgba(232,155,46,.28); }
+      .btn-amber:hover { box-shadow: 0 12px 30px rgba(232,155,46,.42); }
+
+      /* Parallax layers */
+      [data-parallax] { will-change: transform; }
+
+      /* Animated pipeline flow */
+      .pipe-flow { stroke-dasharray: 6 8; animation: dashFlow 1.2s linear infinite; }
+      @keyframes dashFlow { to { stroke-dashoffset: -28; } }
+      .pipeline svg { transition: transform .4s ease; }
+
+      /* Portal + PO gentle float */
+      .float-soft { animation: floatSoft 7s ease-in-out infinite; }
+      @keyframes floatSoft { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+      /* Final CTA — fixed-background parallax (desktop, motion-safe) */
+      @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+        .final { background-attachment: fixed; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
-        .reveal { opacity: 1; transform: none; transition: none; }
+        .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+        .hero-aurora .blob, .hero-grid, .pipe-flow, .float-soft { animation: none; }
+        .scroll-progress { display: none; }
+        .tilt, .btn::before, [data-parallax] { transition: none; transform: none; }
+        .btn:hover::before { left: -120%; }
       }
     </style>
   </body>
