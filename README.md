@@ -28,5 +28,4 @@ Single-page Astro site. All HTML, CSS, and JS live in `src/pages/index.astro`.
 - Never name software tools/platforms in visible copy or alt text — capability language only
 - Design tokens (do not change): green `#175239`, dark green `#0E3B27`, amber `#E89B2E`, paper `#F7F6F2`, ink `#1E2A24`
 - Fonts: Archivo (display), Figtree (body), IBM Plex Mono (numbers/labels) — self-hosted via Fontsource
-- Keep the site pure static: no client frameworks, subtle animations only, respect `prefers-reduced-motion`
 - The ROI section styled as a wholesale purchase order is the signature element — keep it
