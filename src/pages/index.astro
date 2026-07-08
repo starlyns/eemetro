@@ -8,6 +8,30 @@ const PHONE = '(646) 580-2939';
 const PHONE_HREF = 'tel:+16465802939';
 const PLATFORM_URL = 'https://ai.eemetro.com';
 
+// Package pricing + checkout links (single source of truth for the billing toggle).
+// Annual card shows the effective monthly rate; note shows the billed total + savings.
+// 3-month links exist too (unused for now):
+//   starter 3mo $3,600  https://buy.stripe.com/cNi8wOaun24h1u1c8i9sk0a
+//   growth  3mo $7,000  https://buy.stripe.com/dRmbJ08mf7oB8Wt0pA9sk0h
+//   revenue 3mo $12,000 https://buy.stripe.com/dRm9AS0TN7oBdcJb4e9sk0e
+const TIERS = {
+  starter: {
+    mPrice: '$1,200', mLink: 'https://buy.stripe.com/cNi4gybyr5gt3C9goy9sk0b',
+    aPrice: '$1,000', aLink: 'https://buy.stripe.com/5kQ9AS6e7fV7goV8W69sk0j',
+    aNote: 'billed annually ($12,000/yr) — save $2,400',
+  },
+  growth: {
+    mPrice: '$2,500', mLink: 'https://buy.stripe.com/14AcN4cCv5gt3C9b4e9sk0g',
+    aPrice: '$2,083', aLink: 'https://buy.stripe.com/fZu14m0TN8sF1u1a0a9sk0k',
+    aNote: 'billed annually ($25,000/yr) — save $5,000',
+  },
+  revenue: {
+    mPrice: '$5,000', mLink: 'https://buy.stripe.com/cNi4gy9qj10d8Wt8W69sk0d',
+    aPrice: '$4,167', aLink: 'https://buy.stripe.com/eVq28q7ib38legN3BM9sk0l',
+    aNote: 'billed annually ($50,000/yr) — save $10,000',
+  },
+};
+
 import { Image, getImage } from 'astro:assets';
 import '@fontsource-variable/archivo';
 import '@fontsource-variable/figtree';
@@ -363,10 +387,18 @@ const description =
             </figure>
           </div>
 
+          <div class="bill-toggle reveal" role="radiogroup" aria-label="Billing period">
+            <button type="button" class="bt-opt mono is-active" data-term="m" aria-pressed="true">MONTHLY</button>
+            <button type="button" class="bt-opt mono" data-term="a" aria-pressed="false">
+              ANNUAL <span class="bt-save">2 MONTHS FREE</span>
+            </button>
+          </div>
+
           <div class="tiers">
             <article class="tier reveal">
               <h3>Starter Growth System</h3>
-              <p class="price mono">$1,200<span>/month</span></p>
+              <p class="price mono js-price" data-m-price={TIERS.starter.mPrice} data-a-price={TIERS.starter.aPrice}>{TIERS.starter.mPrice}<span>/month</span></p>
+              <p class="price-note mono js-price-note" data-m-note="billed monthly" data-a-note={TIERS.starter.aNote}>billed monthly</p>
               <p class="tier-for">For manufacturers, distributors, and food brands that need a professional online presence and a way to capture new business opportunities.</p>
               <ul class="ticks">
                 <li>Professional website management</li>
@@ -380,13 +412,14 @@ const description =
                 <li>Contact database organization</li>
               </ul>
               <p class="outcome"><strong>Outcome:</strong> generate more inquiries and stop losing leads that come through your website.</p>
-              <a class="btn btn-green" href={BOOK_URL}>Start Here</a>
+              <a class="btn btn-green js-buy" data-m-link={TIERS.starter.mLink} data-a-link={TIERS.starter.aLink} href={TIERS.starter.mLink} rel="noopener">Start Here</a>
             </article>
 
             <article class="tier tier-featured reveal">
               <p class="flag mono">MOST POPULAR</p>
               <h3>Growth Automation System</h3>
-              <p class="price mono">$2,500<span>/month</span></p>
+              <p class="price mono js-price" data-m-price={TIERS.growth.mPrice} data-a-price={TIERS.growth.aPrice}>{TIERS.growth.mPrice}<span>/month</span></p>
+              <p class="price-note mono js-price-note" data-m-note="billed monthly" data-a-note={TIERS.growth.aNote}>billed monthly</p>
               <p class="tier-for">For food companies that already have traffic and customers but need a system to consistently generate and nurture opportunities.</p>
               <ul class="ticks">
                 <li>Everything in Starter</li>
@@ -401,12 +434,13 @@ const description =
                 <li>Performance dashboards &amp; monthly strategy reviews</li>
               </ul>
               <p class="outcome"><strong>Outcome:</strong> convert more prospects into customers while reducing manual sales follow-up.</p>
-              <a class="btn btn-amber" href={BOOK_URL}>Book an Intro Call</a>
+              <a class="btn btn-amber js-buy" data-m-link={TIERS.growth.mLink} data-a-link={TIERS.growth.aLink} href={TIERS.growth.mLink} rel="noopener">Get Started</a>
             </article>
 
             <article class="tier reveal">
               <h3>Revenue OS</h3>
-              <p class="price mono">$5,000<span>/month</span></p>
+              <p class="price mono js-price" data-m-price={TIERS.revenue.mPrice} data-a-price={TIERS.revenue.aPrice}>{TIERS.revenue.mPrice}<span>/month</span></p>
+              <p class="price-note mono js-price-note" data-m-note="billed monthly" data-a-note={TIERS.revenue.aNote}>billed monthly</p>
               <p class="tier-for">For established manufacturers, distributors, and multi-location food businesses that want a complete revenue infrastructure.</p>
               <ul class="ticks">
                 <li>Everything in Growth</li>
@@ -420,7 +454,7 @@ const description =
                 <li>Custom integrations &amp; dedicated account management</li>
               </ul>
               <p class="outcome"><strong>Outcome:</strong> a scalable revenue operating system that increases orders, improves retention, and reduces administrative workload.</p>
-              <a class="btn btn-green" href={BOOK_URL}>Talk to Us</a>
+              <a class="btn btn-green js-buy" data-m-link={TIERS.revenue.mLink} data-a-link={TIERS.revenue.aLink} href={TIERS.revenue.mLink} rel="noopener">Start Now</a>
             </article>
           </div>
 
@@ -580,6 +614,33 @@ const description =
           { threshold: 0.6 }
         );
         counters.forEach((el) => co.observe(el));
+      }
+
+      // ============ BILLING TOGGLE (monthly / annual) ============
+      const btOpts = document.querySelectorAll('.bill-toggle .bt-opt');
+      if (btOpts.length) {
+        const prices = document.querySelectorAll('.js-price');
+        const notes = document.querySelectorAll('.js-price-note');
+        const buys = document.querySelectorAll('.js-buy');
+        const apply = (term) => {
+          btOpts.forEach((b) => {
+            const on = b.dataset.term === term;
+            b.classList.toggle('is-active', on);
+            b.setAttribute('aria-pressed', String(on));
+          });
+          prices.forEach((p) => {
+            const val = term === 'a' ? p.dataset.aPrice : p.dataset.mPrice;
+            if (!reduceMotion) {
+              p.classList.remove('price-swap');
+              void p.offsetWidth; // restart animation
+              p.classList.add('price-swap');
+            }
+            p.firstChild.textContent = val;
+          });
+          notes.forEach((n) => (n.textContent = term === 'a' ? n.dataset.aNote : n.dataset.mNote));
+          buys.forEach((a) => (a.href = term === 'a' ? a.dataset.aLink : a.dataset.mLink));
+        };
+        btOpts.forEach((b) => b.addEventListener('click', () => apply(b.dataset.term)));
       }
 
       // ============ RICH MOTION (skipped entirely under reduced-motion) ============
@@ -1051,9 +1112,48 @@ const description =
         .final { background-attachment: fixed; }
       }
 
+      /* Billing toggle (monthly / annual) */
+      .bill-toggle {
+        display: flex; justify-content: center; gap: 0;
+        width: max-content; margin: 0 auto 2.2rem;
+        background: #0e3b27; border-radius: 999px; padding: 5px;
+        box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+      }
+      .bt-opt {
+        appearance: none; border: 0; cursor: pointer;
+        background: transparent; color: rgba(247,246,242,.75);
+        font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 500;
+        padding: 0.6rem 1.4rem; border-radius: 999px;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        transition: background .25s ease, color .25s ease;
+      }
+      .bt-opt:hover { color: #f7f6f2; }
+      .bt-opt.is-active { background: #e89b2e; color: #0e3b27; font-weight: 600; }
+      .bt-opt:focus-visible { outline: 2px solid #e89b2e; outline-offset: 2px; }
+      .bt-save {
+        font-size: 0.62rem; letter-spacing: 0.08em; font-weight: 700;
+        background: #175239; color: #f7f6f2;
+        padding: 0.18rem 0.5rem; border-radius: 999px;
+      }
+      .bt-opt.is-active .bt-save { background: #0e3b27; }
+      @media (max-width: 480px) {
+        .bt-opt { padding: 0.55rem 0.9rem; font-size: 0.72rem; }
+        .bt-save { display: none; }
+      }
+
+      /* Price note under each tier price */
+      .price-note { font-size: 0.72rem; letter-spacing: 0.05em; color: #175239; opacity: .85; margin: -0.4em 0 0.8em; min-height: 1.1em; }
+
+      /* Price swap micro-animation */
+      .price-swap { animation: priceSwap .35s cubic-bezier(.22,.61,.36,1); }
+      @keyframes priceSwap {
+        0% { opacity: 0; transform: translateY(8px) scale(.96); }
+        100% { opacity: 1; transform: none; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .reveal { opacity: 1; transform: none; filter: none; transition: none; }
-        .hero-aurora .blob, .hero-grid, .pipe-flow, .float-soft { animation: none; }
+        .hero-aurora .blob, .hero-grid, .pipe-flow, .float-soft, .price-swap { animation: none; }
         .scroll-progress { display: none; }
         .tilt, .btn::before, [data-parallax] { transition: none; transform: none; }
         .btn:hover::before { left: -120%; }
