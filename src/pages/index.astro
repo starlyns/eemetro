@@ -8,6 +8,17 @@ const PHONE = '(646) 580-2939';
 const PHONE_HREF = 'tel:+16465802939';
 const PLATFORM_URL = 'https://ai.eemetro.com';
 
+// Social proof
+const REVIEWS_URL = 'https://share.google/Mvh0Hf03VbFpGj18F';
+const PORTFOLIO_URL = 'https://starlyns.com/portfolio/';
+// PLACEHOLDERS — swap with the 4 real testimonials before merging to main
+const REVIEWS = [
+  { name: 'PLACEHOLDER NAME 1', stars: 5, text: 'Placeholder testimonial text one — replace with the real review before this section goes live.' },
+  { name: 'PLACEHOLDER NAME 2', stars: 5, text: 'Placeholder testimonial text two — replace with the real review before this section goes live.' },
+  { name: 'PLACEHOLDER NAME 3', stars: 5, text: 'Placeholder testimonial text three — replace with the real review before this section goes live.' },
+  { name: 'PLACEHOLDER NAME 4', stars: 5, text: 'Placeholder testimonial text four — replace with the real review before this section goes live.' },
+];
+
 // Package pricing + checkout links (single source of truth for the billing toggle).
 // Annual card shows the effective monthly rate; note shows the billed total + savings.
 // 3-month links exist too (unused for now):
@@ -520,6 +531,36 @@ const description =
         </div>
       </section>
 
+      <!-- ============ REVIEWS ============ -->
+      <section class="reviews" id="reviews">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow">REVIEWS</p>
+            <h2>Owners who trusted us with their growth</h2>
+          </div>
+
+          <div class="rev-grid">
+            {REVIEWS.map((r) => (
+              <blockquote class="rev-card reveal">
+                <p class="rev-stars" aria-label={`${r.stars} out of 5 stars`}>{'★'.repeat(r.stars)}</p>
+                <p class="rev-text">“{r.text}”</p>
+                <footer class="rev-name mono">— {r.name}</footer>
+              </blockquote>
+            ))}
+          </div>
+
+          <div class="cta-row center reveal">
+            <a class="btn btn-green" href={REVIEWS_URL} target="_blank" rel="noopener">Read our reviews on Google</a>
+          </div>
+
+          <p class="exp-line reveal">
+            From the team behind <strong>Starlyns</strong> — years of building digital sales systems
+            for New York businesses, now focused exclusively on food manufacturers &amp; distributors.
+            <a href={PORTFOLIO_URL} target="_blank" rel="noopener">See our work →</a>
+          </p>
+        </div>
+      </section>
+
       <!-- ============ FINAL CTA ============ -->
       <section class="final" id="book" style={`background-image: linear-gradient(rgba(14,59,39,.94), rgba(14,59,39,.96)), url(${spiceBg.src});`}>
         <div class="wrap center-head">
@@ -697,7 +738,7 @@ const description =
         }
 
         /* 3D tilt on cards (pointer-driven rotate + glare) */
-        const tiltEls = document.querySelectorAll('.tier, .card, .po');
+        const tiltEls = document.querySelectorAll('.tier, .card, .po, .rev-card');
         tiltEls.forEach((el) => {
           el.classList.add('tilt');
           el.addEventListener('pointermove', (ev) => {
@@ -1111,6 +1152,21 @@ const description =
       @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
         .final { background-attachment: fixed; }
       }
+
+      /* Reviews */
+      .reviews { background: #eee9df; }
+      .rev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 980px; margin: 0 auto 2.2rem; }
+      @media (max-width: 800px) { .rev-grid { grid-template-columns: 1fr; } }
+      .rev-card {
+        margin: 0; background: #f7f6f2; border: 1px solid rgba(23, 82, 57, 0.12);
+        border-radius: 14px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.6rem;
+      }
+      .rev-stars { margin: 0; color: #e89b2e; font-size: 1.05rem; letter-spacing: 0.18em; }
+      .rev-text { margin: 0; font-size: 0.98rem; }
+      .rev-name { font-size: 0.78rem; letter-spacing: 0.06em; color: #175239; }
+      .exp-line { text-align: center; max-width: 44rem; margin: 1.6rem auto 0; font-size: 0.95rem; opacity: 0.92; }
+      .exp-line a { color: #175239; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .exp-line a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
       /* Billing toggle (monthly / annual) */
       .bill-toggle {
