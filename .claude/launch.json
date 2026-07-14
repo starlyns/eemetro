@@ -3,9 +3,14 @@
   "configurations": [
     {
       "name": "eemetro-dev",
-      "runtimeExecutable": "C:\\Users\\stejada\\AppData\\Local\\Temp\\claude\\C--Users-stejada-Desktop-STAR-LLC-20260622T180412Z-3-001\\271ecf12-2017-45fc-91ae-1bab68fe9d94\\scratchpad\\node-v24.18.0-win-x64\\node.exe",
-      "runtimeArgs": ["node_modules/astro/astro.js", "dev", "--port", "4321"],
-      "cwd": "C:\\Users\\stejada\\Desktop\\STAR LLC-20260622T180412Z-3-001\\eemetro-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 4321
+    },
+    {
+      "name": "starbuilder-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "F:/starbuilder"],
       "port": 4321
     }
   ]

@@ -9,7 +9,10 @@
       "Bash(unzip -q node.zip)",
       "Bash(./node-v24.18.0-win-x64/node.exe --version)",
       "Bash(./node-v24.18.0-win-x64/npm.cmd --version)",
-      "PowerShell($src = \"C:\\\\Users\\\\stejada\\\\Desktop\\\\STAR LLC-20260622T180412Z-3-001\"; $dst = \"$src\\\\eemetro-site\\\\src\\\\assets\"; New-Item -ItemType Directory -Force $dst | Out-Null; Copy-Item \"$src\\\\ai crm eemetro \\(9\\).jpeg\" \"$dst\\\\hero-produce-data.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(6\\).jpeg\" \"$dst\\\\purchasing-manager-warehouse.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(2\\).jpeg\" \"$dst\\\\bread-production-line.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(7\\).jpeg\" \"$dst\\\\warehouse-team-clipboards.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(1\\).jpeg\" \"$dst\\\\spice-world-map.jpg\"; Get-ChildItem $dst | Select-Object Name, Length)"
+      "PowerShell($src = \"C:\\\\Users\\\\stejada\\\\Desktop\\\\STAR LLC-20260622T180412Z-3-001\"; $dst = \"$src\\\\eemetro-site\\\\src\\\\assets\"; New-Item -ItemType Directory -Force $dst | Out-Null; Copy-Item \"$src\\\\ai crm eemetro \\(9\\).jpeg\" \"$dst\\\\hero-produce-data.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(6\\).jpeg\" \"$dst\\\\purchasing-manager-warehouse.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(2\\).jpeg\" \"$dst\\\\bread-production-line.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(7\\).jpeg\" \"$dst\\\\warehouse-team-clipboards.jpg\"; Copy-Item \"$src\\\\ai crm eemetro \\(1\\).jpeg\" \"$dst\\\\spice-world-map.jpg\"; Get-ChildItem $dst | Select-Object Name, Length)",
+      "Bash(sed -i 's/\"eemetro-landing\"/\"starbuilder-landing\"/' package.json)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
     ]
   }
 }
