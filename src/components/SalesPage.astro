@@ -1,0 +1,1333 @@
+---
+// EE Metro — digital sales systems for food manufacturers & distributors (NY/NJ)
+// Single-page landing. Pure static output, no client frameworks.
+// Bilingual: rendered for English (/) and Spanish (/es/) via the `lang` prop.
+import { strings, type Lang } from '../i18n/strings';
+const { lang = 'en' } = Astro.props as { lang?: Lang };
+const t = strings[lang];
+
+const BOOK_URL = '#book'; // placeholder — set the real booking link before launch
+
+// Contact + platform
+const PHONE = '(646) 580-2939';
+const PHONE_HREF = 'tel:+16465802939';
+
+// Review authors — names & ratings are shared; the quote text is localized (t.reviews.texts).
+const REVIEW_META = [
+  { name: 'Stephanie Rodriguez', stars: 5 },
+  { name: 'Sophia Diakomihalis', stars: 5 },
+  { name: 'Amranul Alam Emram', stars: 5 },
+  { name: 'Ashmar Beadle', stars: 5 },
+];
+
+// Package pricing + checkout links (single source of truth for the billing toggle).
+// Annual card shows the effective monthly rate; note shows the billed total + savings.
+// 3-month links exist too (unused for now):
+//   starter 3mo $3,600  https://buy.stripe.com/cNi8wOaun24h1u1c8i9sk0a
+//   growth  3mo $7,000  https://buy.stripe.com/dRmbJ08mf7oB8Wt0pA9sk0h
+//   revenue 3mo $12,000 https://buy.stripe.com/dRm9AS0TN7oBdcJb4e9sk0e
+const TIERS = {
+  starter: {
+    mPrice: '$1,200', mLink: 'https://buy.stripe.com/cNi4gybyr5gt3C9goy9sk0b',
+    aPrice: '$1,000', aLink: 'https://buy.stripe.com/5kQ9AS6e7fV7goV8W69sk0j',
+    aNote: 'billed annually ($12,000/yr) — save $2,400',
+  },
+  growth: {
+    mPrice: '$2,500', mLink: 'https://buy.stripe.com/14AcN4cCv5gt3C9b4e9sk0g',
+    aPrice: '$2,083', aLink: 'https://buy.stripe.com/fZu14m0TN8sF1u1a0a9sk0k',
+    aNote: 'billed annually ($25,000/yr) — save $5,000',
+  },
+  revenue: {
+    mPrice: '$5,000', mLink: 'https://buy.stripe.com/cNi4gy9qj10d8Wt8W69sk0d',
+    aPrice: '$4,167', aLink: 'https://buy.stripe.com/eVq28q7ib38legN3BM9sk0l',
+    aNote: 'billed annually ($50,000/yr) — save $10,000',
+  },
+};
+
+// Presentation model for the pricing cards: prices/links (shared) + localized copy.
+const PACKAGE_CARDS = (['starter', 'growth', 'revenue'] as const).map((key) => ({
+  key,
+  price: TIERS[key],
+  copy: t.packages.tiers[key],
+  featured: key === 'growth',
+  btnClass: key === 'growth' ? 'btn-amber' : 'btn-green',
+}));
+
+// In-house team cost rows: localized role/covers + shared figures.
+const TEAM_BASE = ['$90,000', '$70,000', '$62,000', '$58,000', '$85,000', '$80,000', '—'];
+const TEAM_COST = [9600, 7500, 6600, 6200, 9100, 8500, 2000];
+const TEAM_ROWS = t.teamcost.rows.map((r, i) => ({ ...r, base: TEAM_BASE[i], cost: TEAM_COST[i] }));
+
+import { Image, getImage } from 'astro:assets';
+import '@fontsource-variable/archivo';
+import '@fontsource-variable/figtree';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+
+import heroImg from '../assets/hero-produce-data.jpg';
+import problemImg from '../assets/purchasing-manager-warehouse.jpg';
+import breadImg from '../assets/bread-production-line.jpg';
+import teamImg from '../assets/warehouse-team-clipboards.jpg';
+import spiceImg from '../assets/spice-world-map.jpg';
+
+const spiceBg = await getImage({ src: spiceImg, width: 1600, format: 'webp', quality: 60 });
+
+const SITE = 'https://eemetro.com';
+const pageUrl = lang === 'es' ? `${SITE}/es/` : `${SITE}/`;
+const title = t.meta.title;
+const description = t.meta.description;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <link rel="alternate" hreflang="en" href={`${SITE}/`} />
+    <link rel="alternate" hreflang="es" href={`${SITE}/es/`} />
+    <link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:locale" content={t.meta.ogLocale} />
+    <meta name="theme-color" content="#175239" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23175239'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23E89B2E'%3EE%3C/text%3E%3C/svg%3E" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ProfessionalService',
+        name: 'EE Metro',
+        url: pageUrl,
+        telephone: '+1-646-580-2939',
+        description,
+        areaServed: ['New York', 'New Jersey'],
+        knowsAbout: ['Revenue operations', 'Food manufacturing', 'Food distribution'],
+      })}
+    />
+    <script is:inline>
+      // Language routing: honor a remembered choice; otherwise auto-detect the browser
+      // language on first visit. Runs before paint to avoid a flash of the wrong language.
+      (function () {
+        try {
+          var cur = document.documentElement.lang === 'es' ? 'es' : 'en';
+          var stored = null;
+          try { stored = localStorage.getItem('eemetro-lang'); } catch (e) {}
+          if (cur === 'en') {
+            var wantEs = stored === 'es';
+            if (!stored) {
+              var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+              wantEs = nav.indexOf('es') === 0;
+            }
+            if (wantEs) location.replace('/es/');
+          } else if (cur === 'es' && stored === 'en') {
+            location.replace('/');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <!-- ============ NAV ============ -->
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="#top" aria-label={t.nav.homeAria}>
+          <span class="brand-mark">EE</span>
+          <span class="brand-text">METRO<small>{t.nav.brandTagline}</small></span>
+        </a>
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+          aria-label={t.nav.openMenu}
+          data-open={t.nav.openMenu}
+          data-close={t.nav.closeMenu}
+        >
+          <span class="nav-toggle-bar" aria-hidden="true"></span>
+          <span class="nav-toggle-bar" aria-hidden="true"></span>
+          <span class="nav-toggle-bar" aria-hidden="true"></span>
+        </button>
+        <div class="nav-menu" id="nav-menu">
+          <nav aria-label={t.nav.mainAria}>
+            <a href="#problem">{t.nav.problem}</a>
+            <a href="#system">{t.nav.system}</a>
+            <a href="#roi">{t.nav.roi}</a>
+            <a href="#packages">{t.nav.packages}</a>
+          </nav>
+          <a class="nav-phone" href={PHONE_HREF} aria-label={`${t.nav.callAria} ${PHONE}`}>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"></path></svg>
+            <span>{PHONE}</span>
+          </a>
+          <div class="lang-switch" role="group" aria-label={t.nav.langAria}>
+            <a href="/" hreflang="en" data-lang="en" class={lang === 'en' ? 'is-active' : undefined} aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+            <a href="/es/" hreflang="es" data-lang="es" class={lang === 'es' ? 'is-active' : undefined} aria-current={lang === 'es' ? 'true' : undefined}>ES</a>
+          </div>
+          <a class="btn btn-amber nav-cta" href={BOOK_URL}>{t.nav.book}</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ============ HERO ============ -->
+      <section class="hero" id="hero">
+        <div class="hero-media" data-parallax="0.08">
+          <Image
+            src={heroImg}
+            width={1600}
+            widths={[800, 1600]}
+            sizes="100vw"
+            format="webp"
+            quality={80}
+            alt={t.hero.imgAlt}
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="hero-scrim" aria-hidden="true"></div>
+        </div>
+        <div class="hero-aurora" aria-hidden="true" data-depth="10">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+          <span class="hero-grid"></span>
+        </div>
+        <div class="wrap hero-inner">
+          <p class="eyebrow">{t.hero.eyebrow}</p>
+          <h1 set:html={t.hero.h1Html}></h1>
+          <p class="lede">{t.hero.lede}</p>
+          <div class="cta-row">
+            <a class="btn btn-amber" href={BOOK_URL}>{t.hero.ctaBook}</a>
+            <a class="btn btn-ghost" href="#packages">{t.hero.ctaPackages}</a>
+          </div>
+          <p class="hero-call">{t.hero.callBefore}<a href={PHONE_HREF}>{PHONE}</a>{t.hero.callAfter}</p>
+          <p class="hero-note mono">{t.hero.note}</p>
+        </div>
+      </section>
+
+      <!-- ============ PROBLEM ============ -->
+      <section class="problem" id="problem">
+        <div class="wrap split">
+          <figure class="reveal">
+            <Image
+              src={problemImg}
+              width={1600}
+              widths={[800, 1600]}
+              sizes="(max-width: 900px) 100vw, 50vw"
+              format="webp"
+              quality={80}
+              alt={t.problem.imgAlt}
+              loading="lazy"
+            />
+            <figcaption class="mono">{t.problem.figcaption}</figcaption>
+          </figure>
+          <div class="copy reveal">
+            <p class="eyebrow">{t.problem.eyebrow}</p>
+            <h2>{t.problem.h2}</h2>
+            <p>{t.problem.intro}</p>
+            <ul class="ticks">
+              {t.problem.list.map((item) => <li>{item}</li>)}
+            </ul>
+            <p set:html={t.problem.closerHtml}></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SYSTEM / PIPELINE ============ -->
+      <section class="system" id="system">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow">{t.system.eyebrow}</p>
+            <h2>{t.system.h2}</h2>
+            <p class="sub">{t.system.sub}</p>
+          </div>
+
+          <!-- Pipeline diagram (inline SVG, palette only) -->
+          <div class="pipeline reveal" role="img" aria-label={t.system.pipelineAria}>
+            <svg viewBox="0 0 920 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0 0L10 5L0 10z" fill="#E89B2E"></path>
+                </marker>
+              </defs>
+              <g font-family="'IBM Plex Mono', monospace" font-size="15" text-anchor="middle">
+                <rect x="10" y="55" width="200" height="70" rx="10" fill="#175239"></rect>
+                <text x="110" y="85" fill="#F7F6F2">{t.system.pipeline[0].l1}</text>
+                <text x="110" y="107" fill="#F7F6F2">{t.system.pipeline[0].l2}</text>
+
+                <line x1="215" y1="90" x2="245" y2="90" stroke="#E89B2E" stroke-width="3" marker-end="url(#arr)"></line>
+
+                <rect x="250" y="55" width="200" height="70" rx="10" fill="#175239"></rect>
+                <text x="350" y="85" fill="#F7F6F2">{t.system.pipeline[1].l1}</text>
+                <text x="350" y="107" fill="#F7F6F2">{t.system.pipeline[1].l2}</text>
+
+                <line x1="455" y1="90" x2="485" y2="90" stroke="#E89B2E" stroke-width="3" marker-end="url(#arr)"></line>
+
+                <rect x="490" y="55" width="200" height="70" rx="10" fill="#175239"></rect>
+                <text x="590" y="85" fill="#F7F6F2">{t.system.pipeline[2].l1}</text>
+                <text x="590" y="107" fill="#F7F6F2">{t.system.pipeline[2].l2}</text>
+
+                <line x1="695" y1="90" x2="725" y2="90" stroke="#E89B2E" stroke-width="3" marker-end="url(#arr)"></line>
+
+                <rect x="730" y="55" width="180" height="70" rx="10" fill="#0E3B27" stroke="#E89B2E" stroke-width="2"></rect>
+                <text x="820" y="85" fill="#E89B2E">{t.system.pipeline[3].l1}</text>
+                <text x="820" y="107" fill="#E89B2E">{t.system.pipeline[3].l2}</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="grid3">
+            {t.system.cards.map((c) => (
+              <article class="card reveal">
+                <h3>{c.title}</h3>
+                <p>{c.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOW IT WORKS ============ -->
+      <section class="how" id="how">
+        <div class="wrap split split-rev">
+          <div class="copy reveal">
+            <p class="eyebrow">{t.how.eyebrow}</p>
+            <h2>{t.how.h2}</h2>
+            <ol class="steps">
+              {t.how.steps.map((s, i) => (
+                <li>
+                  <span class="step-no mono">{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{s.title}</h3>
+                    <p>{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <figure class="reveal">
+            <Image
+              src={teamImg}
+              width={1600}
+              widths={[800, 1600]}
+              sizes="(max-width: 900px) 100vw, 50vw"
+              format="webp"
+              quality={80}
+              alt={t.how.imgAlt}
+              loading="lazy"
+            />
+            <figcaption class="mono">{t.how.figcaption}</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ============ ROI — PURCHASE ORDER ============ -->
+      <section class="roi" id="roi">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow eyebrow-light">{t.roi.eyebrow}</p>
+            <h2 class="on-dark">{t.roi.h2}</h2>
+            <p class="sub on-dark">{t.roi.sub}</p>
+          </div>
+
+          <div class="po reveal" id="po">
+            <header class="po-head">
+              <div>
+                <p class="po-brand">{t.roi.brand}</p>
+                <p class="mono po-meta">{t.roi.docType}</p>
+              </div>
+              <div class="po-no">
+                <p class="mono">{t.roi.poNo}</p>
+                <p class="mono">{t.roi.terms}</p>
+              </div>
+            </header>
+
+            <table class="po-table">
+              <thead>
+                <tr>
+                  <th scope="col">{t.roi.thLine}</th>
+                  <th scope="col">{t.roi.thDesc}</th>
+                  <th scope="col" class="num">{t.roi.thQty}</th>
+                  <th scope="col" class="num">{t.roi.thValue}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="mono">001</td>
+                  <td>{t.roi.lines[0]}</td>
+                  <td class="num mono"><span class="count" data-count="18">0</span></td>
+                  <td class="num mono">$<span class="count" data-count="7200">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">002</td>
+                  <td>{t.roi.lines[1]}</td>
+                  <td class="num mono"><span class="count" data-count="6">0</span></td>
+                  <td class="num mono">$<span class="count" data-count="9400">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">003</td>
+                  <td>{t.roi.lines[2]}</td>
+                  <td class="num mono"><span class="count" data-count="42">0</span></td>
+                  <td class="num mono">$<span class="count" data-count="15800">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">004</td>
+                  <td>{t.roi.lines[3]}</td>
+                  <td class="num mono"><span class="count" data-count="31">0</span> {t.roi.hrs}</td>
+                  <td class="num mono">$<span class="count" data-count="1240">0</span></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3">{t.roi.totalLabel}</td>
+                  <td class="num mono total">$<span class="count" data-count="33640">0</span></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <footer class="po-foot mono">
+              <span>{t.roi.authorized}</span>
+              <span class="po-stamp">{t.roi.stamp}</span>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PACKAGES ============ -->
+      <section class="packages" id="packages">
+        <div class="wrap">
+          <div class="pack-intro split">
+            <div class="copy reveal">
+              <p class="eyebrow">{t.packages.eyebrow}</p>
+              <h2>{t.packages.h2}</h2>
+              <p class="sub">{t.packages.sub}</p>
+            </div>
+            <figure class="reveal">
+              <Image
+                src={breadImg}
+                width={1600}
+                widths={[800, 1600]}
+                sizes="(max-width: 900px) 100vw, 50vw"
+                format="webp"
+                quality={80}
+                alt={t.packages.imgAlt}
+                loading="lazy"
+              />
+              <figcaption class="mono">{t.packages.figcaption}</figcaption>
+            </figure>
+          </div>
+
+          <div class="bill-toggle reveal" role="radiogroup" aria-label={t.packages.billingAria}>
+            <button type="button" class="bt-opt mono is-active" data-term="m" aria-pressed="true">{t.packages.billMonthly}</button>
+            <button type="button" class="bt-opt mono" data-term="a" aria-pressed="false">
+              {t.packages.billAnnual} <span class="bt-save">{t.packages.billSave}</span>
+            </button>
+          </div>
+
+          <div class="tiers">
+            {PACKAGE_CARDS.map((c) => (
+              <article class={`tier reveal${c.featured ? ' tier-featured' : ''}`}>
+                {c.featured && <p class="flag mono">{t.packages.mostPopular}</p>}
+                <h3>{c.copy.name}</h3>
+                <p class="price mono js-price" data-m-price={c.price.mPrice} data-a-price={c.price.aPrice}>{c.price.mPrice}<span>{t.packages.perMonth}</span></p>
+                <p class="price-note mono js-price-note" data-m-note={t.packages.billedMonthly} data-a-note={c.copy.annualNote}>{t.packages.billedMonthly}</p>
+                <p class="tier-for">{c.copy.for}</p>
+                <ul class="ticks">
+                  {c.copy.features.map((f) => <li>{f}</li>)}
+                </ul>
+                <p class="outcome"><strong>{t.packages.outcomeLabel}</strong> {c.copy.outcome}</p>
+                <a class={`btn ${c.btnClass} js-buy`} data-m-link={c.price.mLink} data-a-link={c.price.aLink} href={c.price.mLink} rel="noopener">{c.copy.cta}</a>
+              </article>
+            ))}
+          </div>
+
+          <!-- Revenue OS portal mockup -->
+          <div class="portal-band split">
+            <div class="copy reveal">
+              <p class="eyebrow">{t.portal.eyebrow}</p>
+              <h2>{t.portal.h2}</h2>
+              <p>{t.portal.body}</p>
+              <ul class="ticks">
+                {t.portal.ticks.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+            <div class="portal reveal" role="img" aria-label={t.portal.aria}>
+              <div class="portal-chrome" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <p class="mono">orders.yourbrand.com</p>
+              </div>
+              <div class="portal-body" aria-hidden="true">
+                <aside class="portal-side">
+                  <p class="portal-logo">{t.portal.brandLine1}<br />{t.portal.brandLine2}</p>
+                  <p class="active">{t.portal.navCreate}</p>
+                  <p>{t.portal.navHistory}</p>
+                  <p>{t.portal.navStanding}</p>
+                  <p>{t.portal.navInvoices}</p>
+                </aside>
+                <div class="portal-main">
+                  <div class="portal-top mono">
+                    <span>{t.portal.nextDelivery}</span>
+                    <span class="portal-cut">{t.portal.cutoff}</span>
+                  </div>
+                  <div class="portal-row">
+                    <span class="sw"></span>
+                    <div><p>{t.portal.items[0]}</p><p class="mono sku">SKU 1042 · $38.40</p></div>
+                    <button type="button" tabindex="-1">{t.portal.reorder}</button>
+                  </div>
+                  <div class="portal-row">
+                    <span class="sw sw2"></span>
+                    <div><p>{t.portal.items[1]}</p><p class="mono sku">SKU 2210 · $64.00</p></div>
+                    <button type="button" tabindex="-1">{t.portal.reorder}</button>
+                  </div>
+                  <div class="portal-row">
+                    <span class="sw sw3"></span>
+                    <div><p>{t.portal.items[2]}</p><p class="mono sku">SKU 3307 · $89.50</p></div>
+                    <button type="button" tabindex="-1">{t.portal.reorder}</button>
+                  </div>
+                  <div class="portal-total mono">
+                    <span>{t.portal.itemsTotal}</span>
+                    <span class="portal-place">{t.portal.placeOrder}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TEAM COST / IN-HOUSE ALTERNATIVE ============ -->
+      <section class="teamcost" id="cost">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow">{t.teamcost.eyebrow}</p>
+            <h2>{t.teamcost.h2}</h2>
+            <p class="sub">{t.teamcost.sub}</p>
+          </div>
+
+          <div class="po reveal">
+            <header class="po-head">
+              <div>
+                <p class="po-brand">{t.teamcost.brand}</p>
+                <p class="mono po-meta">{t.teamcost.docType}</p>
+              </div>
+              <div class="po-no">
+                <p class="mono">{t.teamcost.region}</p>
+                <p class="mono">{t.teamcost.basis}</p>
+              </div>
+            </header>
+
+            <table class="po-table">
+              <thead>
+                <tr>
+                  <th scope="col">{t.teamcost.thRole}</th>
+                  <th scope="col">{t.teamcost.thCovers}</th>
+                  <th scope="col" class="num">{t.teamcost.thBase}</th>
+                  <th scope="col" class="num">{t.teamcost.thCost}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {TEAM_ROWS.map((r) => (
+                  <tr>
+                    <td class="mono">{r.role}</td>
+                    <td>{r.covers}</td>
+                    <td class="num mono">{r.base}</td>
+                    <td class="num mono">$<span class="count" data-count={r.cost}>0</span></td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3">{t.teamcost.totalLabel}</td>
+                  <td class="num mono total">$<span class="count" data-count="49500">0</span></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <footer class="po-foot mono">
+              <span>{t.teamcost.foot}</span>
+              <span class="po-stamp">{t.teamcost.stamp}</span>
+            </footer>
+          </div>
+
+          <div class="tc-compare reveal">
+            <div class="tc-col">
+              <p class="tc-big mono">{t.teamcost.bigYear}</p>
+              <p class="tc-small">{t.teamcost.smallYear}</p>
+            </div>
+            <div class="tc-vs mono" aria-hidden="true">{t.teamcost.vs}</div>
+            <div class="tc-col">
+              <p class="tc-big tc-amber mono">{t.teamcost.bigMo}</p>
+              <p class="tc-small">{t.teamcost.smallMo}</p>
+              <a class="btn btn-amber" href="#packages">{t.teamcost.compareCta}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ REVIEWS ============ -->
+      <section class="reviews" id="reviews">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow">{t.reviews.eyebrow}</p>
+            <h2>{t.reviews.h2}</h2>
+          </div>
+
+          <div class="rev-grid">
+            {REVIEW_META.map((r, i) => (
+              <blockquote class="rev-card reveal">
+                <p class="rev-stars" aria-label={`${r.stars} ${t.reviews.starsAria}`}>{'★'.repeat(r.stars)}</p>
+                <p class="rev-text">“{t.reviews.texts[i]}”</p>
+                <footer class="rev-name mono">— {r.name}</footer>
+              </blockquote>
+            ))}
+          </div>
+
+          <p class="exp-line reveal" set:html={t.reviews.expLineHtml}></p>
+        </div>
+      </section>
+
+      <!-- ============ FINAL CTA ============ -->
+      <section class="final" id="book" style={`background-image: linear-gradient(rgba(14,59,39,.94), rgba(14,59,39,.96)), url(${spiceBg.src});`}>
+        <div class="wrap center-head">
+          <p class="eyebrow eyebrow-light reveal">{t.final.eyebrow}</p>
+          <h2 class="on-dark reveal">{t.final.h2}</h2>
+          <p class="sub on-dark reveal">{t.final.sub}</p>
+          <div class="cta-row center reveal">
+            <a class="btn btn-amber btn-lg" href={BOOK_URL}>{t.final.cta}</a>
+          </div>
+          <p class="mono final-note reveal">{t.final.note}</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-inner">
+        <p><strong>EE METRO</strong> · {t.footer.tagline}</p>
+        <p class="foot-contact">
+          <a href={PHONE_HREF}>{PHONE}</a>
+          <a href="#">{t.footer.login}</a>
+        </p>
+        <p class="mono">{t.footer.region}</p>
+      </div>
+    </footer>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script>
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const hasIO = 'IntersectionObserver' in window;
+
+      // Mobile nav menu (hamburger)
+      const navInner = document.querySelector('.nav-inner');
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      if (navInner && navToggle && navMenu) {
+        const setMenu = (open) => {
+          navInner.classList.toggle('menu-open', open);
+          navToggle.setAttribute('aria-expanded', String(open));
+          const label = open ? navToggle.dataset.close : navToggle.dataset.open;
+          if (label) navToggle.setAttribute('aria-label', label);
+        };
+        navToggle.addEventListener('click', () => setMenu(!navInner.classList.contains('menu-open')));
+        navMenu.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => setMenu(false));
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && navInner.classList.contains('menu-open')) {
+            setMenu(false);
+            navToggle.focus();
+          }
+        });
+        document.addEventListener('click', (e) => {
+          if (navInner.classList.contains('menu-open') && !navInner.contains(e.target)) setMenu(false);
+        });
+      }
+
+      // Remember the visitor's explicit language choice (read by the head detect script)
+      document.querySelectorAll('.lang-switch a').forEach((a) => {
+        a.addEventListener('click', () => {
+          try { localStorage.setItem('eemetro-lang', a.dataset.lang); } catch (e) {}
+        });
+      });
+
+      // Scroll reveal — with per-group stagger
+      const revealEls = document.querySelectorAll('.reveal');
+      const groups = new Map();
+      revealEls.forEach((el) => {
+        const p = el.parentElement;
+        const arr = groups.get(p) || [];
+        arr.push(el);
+        groups.set(p, arr);
+      });
+      groups.forEach((arr) => {
+        if (arr.length > 1) arr.forEach((el, i) => el.style.setProperty('--reveal-delay', i * 90 + 'ms'));
+      });
+      if (reduceMotion || !hasIO) {
+        revealEls.forEach((el) => el.classList.add('in-view'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in-view');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.15 }
+        );
+        revealEls.forEach((el) => io.observe(el));
+      }
+
+      // Count-up numbers in the purchase order
+      const fmt = (n) => n.toLocaleString('en-US');
+      const counters = document.querySelectorAll('.count');
+      const setFinal = (el) => (el.textContent = fmt(Number(el.dataset.count)));
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        counters.forEach(setFinal);
+      } else {
+        const animate = (el) => {
+          const target = Number(el.dataset.count);
+          const dur = 1200;
+          const t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = fmt(Math.round(target * eased));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+        const co = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                animate(e.target);
+                co.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.6 }
+        );
+        counters.forEach((el) => co.observe(el));
+      }
+
+      // ============ BILLING TOGGLE (monthly / annual) ============
+      const btOpts = document.querySelectorAll('.bill-toggle .bt-opt');
+      if (btOpts.length) {
+        const prices = document.querySelectorAll('.js-price');
+        const notes = document.querySelectorAll('.js-price-note');
+        const buys = document.querySelectorAll('.js-buy');
+        const apply = (term) => {
+          btOpts.forEach((b) => {
+            const on = b.dataset.term === term;
+            b.classList.toggle('is-active', on);
+            b.setAttribute('aria-pressed', String(on));
+          });
+          prices.forEach((p) => {
+            const val = term === 'a' ? p.dataset.aPrice : p.dataset.mPrice;
+            if (!reduceMotion) {
+              p.classList.remove('price-swap');
+              void p.offsetWidth; // restart animation
+              p.classList.add('price-swap');
+            }
+            p.firstChild.textContent = val;
+          });
+          notes.forEach((n) => (n.textContent = term === 'a' ? n.dataset.aNote : n.dataset.mNote));
+          buys.forEach((a) => (a.href = term === 'a' ? a.dataset.aLink : a.dataset.mLink));
+        };
+        btOpts.forEach((b) => b.addEventListener('click', () => apply(b.dataset.term)));
+      }
+
+      // ============ RICH MOTION (skipped entirely under reduced-motion) ============
+      if (!reduceMotion) {
+        const root = document.documentElement;
+
+        /* Parallax targets: explicit [data-parallax] + section figures */
+        const parallaxEls = [];
+        document.querySelectorAll('[data-parallax]').forEach((el) =>
+          parallaxEls.push({ el, speed: parseFloat(el.dataset.parallax) || 0.12 })
+        );
+        document.querySelectorAll('.split figure').forEach((el) =>
+          parallaxEls.push({ el, speed: 0.06 })
+        );
+
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const scrollable = root.scrollHeight - root.clientHeight;
+            const y = window.scrollY || root.scrollTop || 0;
+            root.style.setProperty('--sp', scrollable > 0 ? y / scrollable : 0);
+            const vh = window.innerHeight;
+            for (const { el, speed } of parallaxEls) {
+              const r = el.getBoundingClientRect();
+              const center = r.top + r.height / 2 - vh / 2;
+              el.style.transform = 'translate3d(0,' + (-center * speed).toFixed(1) + 'px,0)';
+            }
+            ticking = false;
+          });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        onScroll();
+
+        /* Hero pointer parallax (aurora field + content shift for depth) */
+        const hero = document.querySelector('.hero');
+        const depthEls = hero ? hero.querySelectorAll('[data-depth]') : [];
+        if (hero && depthEls.length) {
+          hero.addEventListener('pointermove', (ev) => {
+            const r = hero.getBoundingClientRect();
+            const dx = (ev.clientX - r.left) / r.width - 0.5;
+            const dy = (ev.clientY - r.top) / r.height - 0.5;
+            depthEls.forEach((el) => {
+              const d = parseFloat(el.dataset.depth) || 0;
+              el.style.transform =
+                'translate3d(' + (-dx * d).toFixed(2) + 'px,' + (-dy * d).toFixed(2) + 'px,0)';
+            });
+          });
+          hero.addEventListener('pointerleave', () => {
+            depthEls.forEach((el) => (el.style.transform = ''));
+          });
+        }
+
+        /* 3D tilt on cards (pointer-driven rotate + glare) */
+        const tiltEls = document.querySelectorAll('.tier, .card, .po, .rev-card');
+        tiltEls.forEach((el) => {
+          el.classList.add('tilt');
+          el.addEventListener('pointermove', (ev) => {
+            const r = el.getBoundingClientRect();
+            const px = (ev.clientX - r.left) / r.width;
+            const py = (ev.clientY - r.top) / r.height;
+            el.style.setProperty('--ry', ((px - 0.5) * 9).toFixed(2) + 'deg');
+            el.style.setProperty('--rx', ((0.5 - py) * 9).toFixed(2) + 'deg');
+            el.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+            el.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+            el.classList.add('is-tilting');
+          });
+          el.addEventListener('pointerleave', () => {
+            el.style.removeProperty('--rx');
+            el.style.removeProperty('--ry');
+            el.classList.remove('is-tilting');
+          });
+        });
+
+        /* Flowing pipeline connectors + floating portal */
+        document.querySelectorAll('.pipeline svg line').forEach((l) => l.classList.add('pipe-flow'));
+        const portal = document.querySelector('.portal');
+        if (portal) portal.classList.add('float-soft');
+
+        /* Directional reveals for two-column sections */
+        document.querySelectorAll('.split').forEach((sp) => {
+          const cols = Array.from(sp.children).filter((c) => c.classList.contains('reveal'));
+          cols.forEach((c, i) => c.classList.add(i === 0 ? 'r-left' : 'r-right'));
+        });
+      }
+    </script>
+
+    <!-- ============ STYLES ============ -->
+    <style>
+      :global(*, *::before, *::after) { box-sizing: border-box; }
+      :global(html) { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        :global(html) { scroll-behavior: auto; }
+      }
+      :global(body) {
+        margin: 0;
+        font-family: 'Figtree Variable', system-ui, sans-serif;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #1e2a24;
+        background: #f7f6f2;
+      }
+      :global(img) { max-width: 100%; height: auto; display: block; }
+
+      h1, h2, h3 { font-family: 'Archivo Variable', system-ui, sans-serif; line-height: 1.15; margin: 0 0 0.5em; }
+      h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 700; }
+      h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 700; }
+      h3 { font-size: 1.25rem; font-weight: 650; }
+      p { margin: 0 0 1em; }
+
+      .mono { font-family: 'IBM Plex Mono', monospace; }
+      .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+      .eyebrow {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.12em;
+        color: #175239;
+        margin-bottom: 0.9em;
+      }
+      .eyebrow-light { color: #e89b2e; }
+      .on-dark { color: #f7f6f2; }
+      .sub { max-width: 46rem; }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 0.85rem 1.6rem;
+        border-radius: 8px;
+        font-weight: 650;
+        font-family: 'Archivo Variable', system-ui, sans-serif;
+        text-decoration: none;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(30, 42, 36, 0.18); }
+      .btn-amber { background: #e89b2e; color: #0e3b27; }
+      .btn-green { background: #175239; color: #f7f6f2; }
+      .btn-ghost { border: 2px solid #f7f6f2; color: #f7f6f2; }
+      .btn-lg { padding: 1.05rem 2.2rem; font-size: 1.1rem; }
+      @media (prefers-reduced-motion: reduce) {
+        .btn { transition: none; }
+        .btn:hover { transform: none; }
+      }
+
+      /* Nav */
+      .nav {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(247, 246, 242, 0.96);
+        border-bottom: 1px solid rgba(23, 82, 57, 0.15);
+        backdrop-filter: blur(6px);
+      }
+      .nav-inner { display: flex; align-items: center; gap: 2rem; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+      .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: #1e2a24; }
+      .brand-mark {
+        background: #175239; color: #e89b2e;
+        font-family: 'Archivo Variable', sans-serif; font-weight: 800;
+        padding: 0.35rem 0.55rem; border-radius: 8px; font-size: 1.05rem;
+      }
+      .brand-text { font-family: 'Archivo Variable', sans-serif; font-weight: 800; letter-spacing: 0.06em; line-height: 1.1; }
+      .brand-text small { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; font-weight: 400; letter-spacing: 0.08em; color: #175239; }
+      .nav-menu { display: flex; align-items: center; gap: 1.5rem; margin-left: auto; }
+      .nav-menu nav { display: flex; gap: 1.4rem; }
+      .nav-menu nav a { color: #1e2a24; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+      .nav-menu nav a:hover { color: #175239; text-decoration: underline; text-underline-offset: 4px; }
+      .nav-cta { padding: 0.6rem 1.2rem; white-space: nowrap; }
+      .nav-phone {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        color: #175239; text-decoration: none; white-space: nowrap;
+        font-family: 'Archivo Variable', sans-serif; font-weight: 700; font-size: 0.95rem;
+      }
+      .nav-phone svg { flex: 0 0 auto; }
+      .nav-phone:hover { color: #0e3b27; text-decoration: underline; text-underline-offset: 3px; }
+
+      /* Language switch (EN | ES) */
+      .lang-switch { display: inline-flex; align-items: center; border: 1px solid rgba(23, 82, 57, 0.35); border-radius: 999px; overflow: hidden; }
+      .lang-switch a {
+        font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; font-weight: 500;
+        letter-spacing: 0.06em; color: #175239; text-decoration: none; padding: 0.32rem 0.62rem; line-height: 1;
+      }
+      .lang-switch a.is-active { background: #175239; color: #f7f6f2; }
+      .lang-switch a:not(.is-active):hover { background: rgba(23, 82, 57, 0.1); }
+
+      /* Hamburger toggle */
+      .nav-toggle {
+        display: none; margin-left: auto; width: 42px; height: 38px; padding: 0;
+        flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+        border: 1px solid rgba(23, 82, 57, 0.3); border-radius: 8px; background: #fff; cursor: pointer;
+      }
+      .nav-toggle-bar { display: block; width: 20px; height: 2px; background: #175239; border-radius: 2px; transition: transform 0.25s ease, opacity 0.2s ease; }
+      .nav-inner.menu-open .nav-toggle-bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      .nav-inner.menu-open .nav-toggle-bar:nth-child(2) { opacity: 0; }
+      .nav-inner.menu-open .nav-toggle-bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+      @media (max-width: 900px) {
+        .nav-inner { position: relative; }
+        .nav-toggle { display: inline-flex; }
+        .nav-menu {
+          display: none; position: absolute; top: calc(100% + 0.7rem); left: 0; right: 0;
+          flex-direction: column; align-items: stretch; gap: 1.1rem; margin: 0;
+          padding: 1.2rem 24px 1.4rem; background: #f7f6f2;
+          border-top: 1px solid rgba(23, 82, 57, 0.15); border-radius: 0 0 12px 12px;
+          box-shadow: 0 20px 44px rgba(0, 0, 0, 0.16);
+        }
+        .nav-inner.menu-open .nav-menu { display: flex; }
+        .nav-menu nav { flex-direction: column; gap: 0.95rem; }
+        .nav-menu nav a { font-size: 1.05rem; }
+        .nav-phone { font-size: 1.05rem; }
+        .lang-switch { align-self: flex-start; }
+        .nav-cta { text-align: center; }
+      }
+
+      /* Hero */
+      .hero { position: relative; color: #f7f6f2; overflow: hidden; }
+      .hero-media { position: absolute; inset: -12% 0; will-change: transform; }
+      .hero-media :global(img) {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover;
+      }
+      .hero-scrim {
+        position: absolute; inset: 0;
+        background: linear-gradient(100deg, rgba(14, 59, 39, 0.93) 0%, rgba(14, 59, 39, 0.82) 45%, rgba(23, 82, 57, 0.55) 100%);
+      }
+      .hero-inner { position: relative; padding-top: clamp(4.5rem, 10vw, 8rem); padding-bottom: clamp(4.5rem, 10vw, 8rem); max-width: 1160px; }
+      .hero .eyebrow { color: #e89b2e; }
+      .hero .lede { font-size: 1.15rem; max-width: 38rem; }
+      .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.6rem 0 1.2rem; }
+      .cta-row.center { justify-content: center; }
+      .hero-call { margin: 0 0 1.1rem; font-size: 1rem; color: #f7f6f2; }
+      .hero-call a { color: #e89b2e; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .hero-call a:hover { text-decoration: underline; text-underline-offset: 3px; }
+      .hero-note { font-size: 0.8rem; letter-spacing: 0.05em; opacity: 0.85; }
+
+      /* Split layouts */
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+      .split > * { min-width: 0; }
+      @media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 1.8rem; } }
+      .split figure { margin: 0; }
+      .split figure :global(img) { border-radius: 14px; box-shadow: 0 10px 30px rgba(30, 42, 36, 0.15); }
+      figcaption { font-size: 0.78rem; color: #175239; margin-top: 0.7rem; letter-spacing: 0.04em; }
+      @media (max-width: 900px) { .split-rev figure { order: -1; } }
+
+      section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+      .problem { background: #f7f6f2; }
+
+      /* System */
+      .system { background: #eee9df; }
+      .center-head { text-align: center; max-width: 52rem; margin: 0 auto 2.5rem; }
+      .center-head .sub { margin-left: auto; margin-right: auto; }
+      .pipeline { max-width: 940px; margin: 0 auto 3rem; overflow-x: auto; }
+      .pipeline svg { min-width: 700px; width: 100%; height: auto; display: block; }
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+      @media (max-width: 900px) { .grid3 { grid-template-columns: 1fr; } }
+      .card { background: #f7f6f2; border-radius: 14px; padding: 1.6rem; border: 1px solid rgba(23, 82, 57, 0.12); }
+      .card h3 { color: #175239; }
+      .card p { margin: 0; }
+
+      /* Steps */
+      .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; }
+      .steps li { display: flex; gap: 1.1rem; align-items: flex-start; }
+      .steps h3 { margin-bottom: 0.25em; }
+      .steps p { margin: 0; }
+      .step-no {
+        flex: 0 0 auto; background: #175239; color: #e89b2e;
+        border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 1rem; font-weight: 500;
+      }
+
+      /* Ticks */
+      .ticks { list-style: none; padding: 0; margin: 0 0 1.2em; display: grid; gap: 0.5rem; }
+      .ticks li { padding-left: 1.7rem; position: relative; }
+      .ticks li::before {
+        content: '✓'; position: absolute; left: 0; top: 0;
+        color: #e89b2e; font-weight: 800;
+      }
+
+      /* ROI purchase order */
+      .roi { background: #0e3b27; }
+      .po {
+        background: #f7f6f2; max-width: 860px; margin: 0 auto;
+        border-radius: 6px; padding: clamp(1.2rem, 3vw, 2.4rem);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        border-top: 10px solid #e89b2e;
+      }
+      .po-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 2px solid #1e2a24; padding-bottom: 1rem; margin-bottom: 0.4rem; }
+      .po-brand { font-family: 'Archivo Variable', sans-serif; font-weight: 800; letter-spacing: 0.05em; margin: 0; }
+      .po-meta, .po-no p { font-size: 0.8rem; margin: 0.2em 0; letter-spacing: 0.06em; }
+      .po-no { text-align: right; }
+      .po-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+      .po-table th {
+        font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 0.75rem;
+        letter-spacing: 0.1em; text-align: left; padding: 0.8rem 0.5rem;
+        border-bottom: 1px solid rgba(30, 42, 36, 0.4);
+      }
+      .po-table td { padding: 0.85rem 0.5rem; border-bottom: 1px dashed rgba(30, 42, 36, 0.25); vertical-align: top; }
+      .po-table .num, .po-table th.num { text-align: right; white-space: nowrap; }
+      .po-table tfoot td {
+        border-bottom: none; border-top: 2px solid #1e2a24;
+        font-family: 'IBM Plex Mono', monospace; font-weight: 500; letter-spacing: 0.08em;
+        padding-top: 1rem; font-size: 0.9rem;
+      }
+      .po-table .total { font-size: 1.35rem; color: #175239; font-weight: 600; }
+      .po-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 1.4rem; font-size: 0.75rem; letter-spacing: 0.08em; }
+      .po-stamp {
+        border: 3px solid #175239; color: #175239; padding: 0.3rem 0.9rem;
+        border-radius: 6px; font-weight: 600; transform: rotate(-4deg); font-size: 0.9rem;
+      }
+      @media (max-width: 640px) {
+        .po-table thead { display: none; }
+        .po-table, .po-table tbody, .po-table tr, .po-table td, .po-table tfoot { display: block; }
+        .po-table td { border: none; padding: 0.2rem 0; }
+        .po-table td.mono:first-child { color: #175239; font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 0.9rem; }
+        .po-table .num { text-align: left; }
+        .po-table tr { border-bottom: 1px dashed rgba(30, 42, 36, 0.25); padding: 0.4rem 0; }
+        .po-table tfoot tr { border-bottom: none; }
+      }
+
+      /* Team cost / in-house alternative */
+      .teamcost { background: #e9ede8; }
+      .tc-compare {
+        max-width: 860px; margin: 2rem auto 0;
+        display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.6rem; align-items: center;
+        background: #0e3b27; color: #f7f6f2;
+        border-radius: 6px; padding: clamp(1.4rem, 3vw, 2.2rem);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+      }
+      .tc-col { display: flex; flex-direction: column; align-items: flex-start; }
+      .tc-big { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 600; margin: 0 0 0.4rem; line-height: 1.1; }
+      .tc-amber { color: #e89b2e; }
+      .tc-small { font-size: 0.9rem; opacity: 0.85; margin: 0 0 1rem; line-height: 1.5; }
+      .tc-vs { align-self: center; font-size: 0.8rem; letter-spacing: 0.18em; opacity: 0.55; }
+      .tc-compare .btn { margin-top: auto; }
+      @media (max-width: 720px) {
+        .tc-compare { grid-template-columns: 1fr; gap: 1.1rem; text-align: left; }
+        .tc-vs { justify-self: start; }
+      }
+
+      /* Packages */
+      .packages { background: #f7f6f2; }
+      .pack-intro { margin-bottom: 3rem; }
+      .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+      @media (max-width: 1000px) { .tiers { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; } }
+      .tier {
+        background: #fff; border: 1px solid rgba(23, 82, 57, 0.15); border-radius: 16px;
+        padding: 1.8rem; display: flex; flex-direction: column; gap: 0.4rem;
+      }
+      .tier .btn { align-self: flex-start; margin-top: 0.8rem; }
+      .tier-featured { border: 2px solid #e89b2e; box-shadow: 0 14px 40px rgba(30, 42, 36, 0.12); position: relative; }
+      .flag {
+        position: absolute; top: -0.8rem; left: 1.6rem;
+        background: #e89b2e; color: #0e3b27; font-size: 0.72rem; letter-spacing: 0.1em;
+        padding: 0.25rem 0.7rem; border-radius: 6px; margin: 0; font-weight: 500;
+      }
+      .price { font-size: 1.5rem; color: #175239; font-weight: 600; margin: 0 0 0.6em; }
+      .price span { font-size: 0.85rem; color: #1e2a24; opacity: 0.7; }
+      .tier-for { font-size: 0.95rem; opacity: 0.85; }
+      .tier .ticks { font-size: 0.95rem; }
+      .outcome { font-size: 0.95rem; background: #eee9df; border-radius: 10px; padding: 0.8rem 1rem; }
+
+      /* Portal mockup */
+      .portal-band { margin-top: 4rem; }
+      .portal {
+        background: #0e3b27; border-radius: 16px; padding: 0.9rem;
+        box-shadow: 0 18px 50px rgba(30, 42, 36, 0.28);
+      }
+      .portal-chrome { display: flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.4rem 0.7rem; }
+      .portal-chrome span { width: 10px; height: 10px; border-radius: 50%; background: rgba(247, 246, 242, 0.35); }
+      .portal-chrome p { margin: 0 auto; color: rgba(247, 246, 242, 0.7); font-size: 0.72rem; letter-spacing: 0.06em; }
+      .portal-body { display: grid; grid-template-columns: 130px 1fr; background: #f7f6f2; border-radius: 10px; overflow: hidden; min-height: 300px; }
+      .portal-side { background: #175239; color: #f7f6f2; padding: 1rem 0.9rem; font-size: 0.8rem; }
+      .portal-side p { margin: 0 0 0.7rem; opacity: 0.75; }
+      .portal-side .active { opacity: 1; color: #e89b2e; font-weight: 700; }
+      .portal-logo { font-family: 'Archivo Variable', sans-serif; font-weight: 800; letter-spacing: 0.08em; line-height: 1.2; margin-bottom: 1.4rem !important; opacity: 1 !important; }
+      .portal-main { padding: 0.9rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+      .portal-top { display: flex; justify-content: space-between; font-size: 0.68rem; letter-spacing: 0.06em; color: #175239; }
+      .portal-cut { color: #b06900; }
+      .portal-row {
+        display: grid; grid-template-columns: 34px 1fr auto; gap: 0.7rem; align-items: center;
+        background: #fff; border: 1px solid rgba(23, 82, 57, 0.14); border-radius: 8px; padding: 0.55rem 0.7rem;
+      }
+      .portal-row p { margin: 0; font-size: 0.82rem; font-weight: 600; }
+      .portal-row .sku { font-size: 0.68rem; font-weight: 400; color: #175239; }
+      .portal-row button {
+        font-family: 'Archivo Variable', sans-serif; font-weight: 700; font-size: 0.72rem;
+        background: #175239; color: #f7f6f2; border: none; border-radius: 6px; padding: 0.45rem 0.8rem;
+        pointer-events: none;
+      }
+      .sw { width: 34px; height: 34px; border-radius: 7px; background: #e89b2e; }
+      .sw2 { background: #175239; }
+      .sw3 { background: #0e3b27; }
+      .portal-total { display: flex; justify-content: space-between; font-size: 0.75rem; letter-spacing: 0.05em; margin-top: 0.2rem; padding: 0.5rem 0.2rem 0; color: #1e2a24; flex-wrap: wrap; gap: 0.5rem; }
+      .portal-top { flex-wrap: wrap; gap: 0.3rem; }
+      @media (max-width: 480px) {
+        .portal-body { grid-template-columns: 1fr; }
+        .portal-side { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; padding: 0.8rem 0.9rem; }
+        .portal-side p { margin: 0; }
+        .portal-logo { width: 100%; margin-bottom: 0.2rem !important; }
+      }
+      .portal-place { color: #0e3b27; background: #e89b2e; padding: 0.35rem 0.7rem; border-radius: 6px; font-weight: 600; }
+
+      /* Final CTA */
+      .final {
+        background-color: #0e3b27;
+        background-size: cover;
+        background-position: center;
+        color: #f7f6f2;
+      }
+      .final .center-head { margin-bottom: 0; }
+      .final-note { font-size: 0.75rem; letter-spacing: 0.12em; opacity: 0.8; margin-top: 2rem; }
+
+      /* Footer */
+      .foot { background: #1e2a24; color: #f7f6f2; padding: 1.6rem 0; }
+      .foot-inner { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: center; }
+      .foot p { margin: 0; font-size: 0.9rem; }
+      .foot-contact { display: flex; gap: 1.4rem; align-items: center; }
+      .foot-contact a { color: #f7f6f2; text-decoration: none; font-weight: 600; }
+      .foot-contact a:hover { color: #e89b2e; text-decoration: underline; text-underline-offset: 3px; }
+      .foot .mono { font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.8; }
+
+      /* ============================================================
+         MOTION & EFFECTS SYSTEM  (palette-locked; degrades gracefully)
+         ============================================================ */
+
+      /* Scroll-reveal — directional + staggered */
+      .reveal {
+        opacity: 0; transform: translateY(34px);
+        transition: opacity 0.7s cubic-bezier(.22,.61,.36,1),
+                    transform 0.7s cubic-bezier(.22,.61,.36,1);
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform;
+      }
+      .reveal.r-left  { transform: translateX(-46px); }
+      .reveal.r-right { transform: translateX(46px); }
+      .reveal.r-scale { transform: scale(.9); }
+      .reveal.r-blur  { filter: blur(10px); }
+      .reveal.in-view { opacity: 1; transform: none; filter: none; }
+
+      /* Scroll progress bar */
+      .scroll-progress {
+        position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+        transform: scaleX(var(--sp, 0)); transform-origin: 0 50%;
+        background: linear-gradient(90deg, #175239, #e89b2e);
+        z-index: 100; pointer-events: none;
+      }
+
+      /* Hero: 3D aurora background */
+      .hero { perspective: 1200px; }
+      .hero-aurora {
+        position: absolute; inset: 0; z-index: 1; overflow: hidden;
+        pointer-events: none; transform-style: preserve-3d;
+      }
+      .hero-aurora .blob {
+        position: absolute; border-radius: 50%; filter: blur(60px);
+        opacity: .55; mix-blend-mode: screen; will-change: transform;
+        animation: blobFloat 18s ease-in-out infinite;
+      }
+      .hero-aurora .b1 { width: 46vw; height: 46vw; left: -6vw; top: -10vw;
+        background: radial-gradient(circle at 30% 30%, #2f8f63, #175239 60%, transparent 72%); }
+      .hero-aurora .b2 { width: 40vw; height: 40vw; right: -8vw; top: 6vw;
+        background: radial-gradient(circle at 60% 40%, #e89b2e, #b06900 55%, transparent 72%);
+        opacity: .42; animation-duration: 22s; animation-delay: -6s; }
+      .hero-aurora .b3 { width: 34vw; height: 34vw; left: 30vw; bottom: -14vw;
+        background: radial-gradient(circle at 50% 50%, #3aa172, #0e3b27 60%, transparent 74%);
+        animation-duration: 26s; animation-delay: -12s; }
+      .hero-grid {
+        position: absolute; inset: -2px; opacity: .16;
+        background-image:
+          linear-gradient(rgba(247,246,242,.25) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(247,246,242,.25) 1px, transparent 1px);
+        background-size: 46px 46px;
+        mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+        animation: gridDrift 40s linear infinite;
+      }
+      .hero-inner { z-index: 2; }
+      @keyframes blobFloat {
+        0%,100% { transform: translate3d(0,0,0) scale(1); }
+        33%     { transform: translate3d(3vw,-2vw,0) scale(1.08); }
+        66%     { transform: translate3d(-2vw,2vw,0) scale(.96); }
+      }
+      @keyframes gridDrift { to { background-position: 46px 46px, 46px 46px; } }
+
+      /* 3D tilt cards (JS adds --rx/--ry/--gx/--gy on pointer) */
+      .tilt {
+        transform: perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(0);
+        transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease, opacity .7s ease;
+        transform-style: preserve-3d; position: relative;
+      }
+      .tilt::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background: radial-gradient(240px circle at var(--gx,50%) var(--gy,0%),
+                    rgba(247,246,242,.35), transparent 60%);
+        opacity: 0; transition: opacity .3s ease; pointer-events: none; z-index: 3;
+      }
+      .tilt.is-tilting { box-shadow: 0 26px 60px rgba(14,59,39,.28); }
+      .tilt.is-tilting::after { opacity: 1; }
+
+      /* Advanced buttons — sheen sweep + lift + press */
+      .btn { position: relative; overflow: hidden; isolation: isolate; }
+      .btn::before {
+        content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+        background: linear-gradient(100deg, transparent, rgba(247,246,242,.55), transparent);
+        transform: skewX(-18deg); transition: left .6s ease; z-index: 1;
+      }
+      .btn:hover::before { left: 140%; }
+      .btn:active { transform: translateY(0) scale(.98); }
+      .btn-amber { box-shadow: 0 6px 18px rgba(232,155,46,.28); }
+      .btn-amber:hover { box-shadow: 0 12px 30px rgba(232,155,46,.42); }
+
+      /* Parallax layers */
+      [data-parallax] { will-change: transform; }
+
+      /* Animated pipeline flow */
+      .pipe-flow { stroke-dasharray: 6 8; animation: dashFlow 1.2s linear infinite; }
+      @keyframes dashFlow { to { stroke-dashoffset: -28; } }
+      .pipeline svg { transition: transform .4s ease; }
+
+      /* Portal + PO gentle float */
+      .float-soft { animation: floatSoft 7s ease-in-out infinite; }
+      @keyframes floatSoft { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+      /* Final CTA — fixed-background parallax (desktop, motion-safe) */
+      @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+        .final { background-attachment: fixed; }
+      }
+
+      /* Reviews */
+      .reviews { background: #eee9df; }
+      .rev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 980px; margin: 0 auto 2.2rem; }
+      @media (max-width: 800px) { .rev-grid { grid-template-columns: 1fr; } }
+      .rev-card {
+        margin: 0; background: #f7f6f2; border: 1px solid rgba(23, 82, 57, 0.12);
+        border-radius: 14px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.6rem;
+      }
+      .rev-stars { margin: 0; color: #e89b2e; font-size: 1.05rem; letter-spacing: 0.18em; }
+      .rev-text { margin: 0; font-size: 0.98rem; }
+      .rev-name { font-size: 0.78rem; letter-spacing: 0.06em; color: #175239; }
+      .exp-line { text-align: center; max-width: 44rem; margin: 1.6rem auto 0; font-size: 0.95rem; opacity: 0.92; }
+      .exp-line a { color: #175239; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .exp-line a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+      /* Billing toggle (monthly / annual) */
+      .bill-toggle {
+        display: flex; justify-content: center; gap: 0;
+        width: max-content; margin: 0 auto 2.2rem;
+        background: #0e3b27; border-radius: 999px; padding: 5px;
+        box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+      }
+      .bt-opt {
+        appearance: none; border: 0; cursor: pointer;
+        background: transparent; color: rgba(247,246,242,.75);
+        font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 500;
+        padding: 0.6rem 1.4rem; border-radius: 999px;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        transition: background .25s ease, color .25s ease;
+      }
+      .bt-opt:hover { color: #f7f6f2; }
+      .bt-opt.is-active { background: #e89b2e; color: #0e3b27; font-weight: 600; }
+      .bt-opt:focus-visible { outline: 2px solid #e89b2e; outline-offset: 2px; }
+      .bt-save {
+        font-size: 0.62rem; letter-spacing: 0.08em; font-weight: 700;
+        background: #175239; color: #f7f6f2;
+        padding: 0.18rem 0.5rem; border-radius: 999px;
+      }
+      .bt-opt.is-active .bt-save { background: #0e3b27; }
+      @media (max-width: 480px) {
+        .bt-opt { padding: 0.55rem 0.9rem; font-size: 0.72rem; }
+        .bt-save { display: none; }
+      }
+
+      /* Price note under each tier price */
+      .price-note { font-size: 0.72rem; letter-spacing: 0.05em; color: #175239; opacity: .85; margin: -0.4em 0 0.8em; min-height: 1.1em; }
+
+      /* Price swap micro-animation */
+      .price-swap { animation: priceSwap .35s cubic-bezier(.22,.61,.36,1); }
+      @keyframes priceSwap {
+        0% { opacity: 0; transform: translateY(8px) scale(.96); }
+        100% { opacity: 1; transform: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+        .hero-aurora .blob, .hero-grid, .pipe-flow, .float-soft, .price-swap { animation: none; }
+        .scroll-progress { display: none; }
+        .tilt, .btn::before, [data-parallax] { transition: none; transform: none; }
+        .btn:hover::before { left: -120%; }
+      }
+    </style>
+  </body>
+</html>
