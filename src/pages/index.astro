@@ -543,6 +543,113 @@ const description =
         </div>
       </section>
 
+      <!-- ============ TEAM COST / IN-HOUSE ALTERNATIVE ============ -->
+      <section class="teamcost" id="cost">
+        <div class="wrap">
+          <div class="center-head reveal">
+            <p class="eyebrow">THE IN-HOUSE ALTERNATIVE</p>
+            <h2>Or build the whole department yourself.</h2>
+            <p class="sub">
+              Everything in these packages is real work, done by real specialists. Here's what the same
+              team costs to hire in-house at New York market rates — fully loaded with payroll taxes,
+              benefits, PTO, and the software each role needs.
+            </p>
+          </div>
+
+          <div class="po reveal">
+            <header class="po-head">
+              <div>
+                <p class="po-brand">IN-HOUSE TEAM · MONTHLY PAYROLL</p>
+                <p class="mono po-meta">DOC TYPE: STAFFING &amp; SOFTWARE ESTIMATE</p>
+              </div>
+              <div class="po-no">
+                <p class="mono">REGION: NY METRO</p>
+                <p class="mono">BASIS: FULLY LOADED</p>
+              </div>
+            </header>
+
+            <table class="po-table">
+              <thead>
+                <tr>
+                  <th scope="col">ROLE</th>
+                  <th scope="col">COVERS</th>
+                  <th scope="col" class="num">BASE / YR</th>
+                  <th scope="col" class="num">COST / MO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="mono">Web Developer &amp; Site Manager</td>
+                  <td>Website, landing pages, updates, uptime</td>
+                  <td class="num mono">$90,000</td>
+                  <td class="num mono">$<span class="count" data-count="9600">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">SEO Specialist</td>
+                  <td>Search visibility, technical &amp; local SEO</td>
+                  <td class="num mono">$70,000</td>
+                  <td class="num mono">$<span class="count" data-count="7500">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">Content Marketer</td>
+                  <td>Copy, newsletters, ongoing content</td>
+                  <td class="num mono">$62,000</td>
+                  <td class="num mono">$<span class="count" data-count="6600">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">Social Media Manager</td>
+                  <td>Posts, graphics, scheduling, community</td>
+                  <td class="num mono">$58,000</td>
+                  <td class="num mono">$<span class="count" data-count="6200">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">CRM / Automation Specialist</td>
+                  <td>CRM, follow-up sequences, lead routing</td>
+                  <td class="num mono">$85,000</td>
+                  <td class="num mono">$<span class="count" data-count="9100">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">RevOps / Reporting Analyst</td>
+                  <td>Pipeline, dashboards, forecasting</td>
+                  <td class="num mono">$80,000</td>
+                  <td class="num mono">$<span class="count" data-count="8500">0</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">Software &amp; Tools Stack</td>
+                  <td>CRM, email, SEO, design &amp; scheduling tools</td>
+                  <td class="num mono">—</td>
+                  <td class="num mono">$<span class="count" data-count="2000">0</span></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3">TOTAL MONTHLY COST TO STAFF IN-HOUSE</td>
+                  <td class="num mono total">$<span class="count" data-count="49500">0</span></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <footer class="po-foot mono">
+              <span>ILLUSTRATIVE — NY MARKET RATES, FULLY LOADED</span>
+              <span class="po-stamp">6 HIRES</span>
+            </footer>
+          </div>
+
+          <div class="tc-compare reveal">
+            <div class="tc-col">
+              <p class="tc-big mono">≈ $594,000 / year</p>
+              <p class="tc-small">to staff it in-house — before turnover, management, ramp-up, and the months before anyone ships a result.</p>
+            </div>
+            <div class="tc-vs mono" aria-hidden="true">vs</div>
+            <div class="tc-col">
+              <p class="tc-big tc-amber mono">from $5,000 / mo</p>
+              <p class="tc-small">EE Metro runs every one of those roles as one system. One invoice, live in weeks — not six job postings.</p>
+              <a class="btn btn-amber" href="#packages">Compare Packages</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ============ REVIEWS ============ -->
       <section class="reviews" id="reviews">
         <div class="wrap">
@@ -969,6 +1076,26 @@ const description =
         .po-table .num { text-align: left; }
         .po-table tr { border-bottom: 1px dashed rgba(30, 42, 36, 0.25); padding: 0.4rem 0; }
         .po-table tfoot tr { border-bottom: none; }
+      }
+
+      /* Team cost / in-house alternative */
+      .teamcost { background: #e9ede8; }
+      .tc-compare {
+        max-width: 860px; margin: 2rem auto 0;
+        display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.6rem; align-items: center;
+        background: #0e3b27; color: #f7f6f2;
+        border-radius: 6px; padding: clamp(1.4rem, 3vw, 2.2rem);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+      }
+      .tc-col { display: flex; flex-direction: column; align-items: flex-start; }
+      .tc-big { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 600; margin: 0 0 0.4rem; line-height: 1.1; }
+      .tc-amber { color: #e89b2e; }
+      .tc-small { font-size: 0.9rem; opacity: 0.85; margin: 0 0 1rem; line-height: 1.5; }
+      .tc-vs { align-self: center; font-size: 0.8rem; letter-spacing: 0.18em; opacity: 0.55; }
+      .tc-compare .btn { margin-top: auto; }
+      @media (max-width: 720px) {
+        .tc-compare { grid-template-columns: 1fr; gap: 1.1rem; text-align: left; }
+        .tc-vs { justify-self: start; }
       }
 
       /* Packages */
