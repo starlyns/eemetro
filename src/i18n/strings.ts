@@ -224,8 +224,8 @@ export const strings = {
     },
     teamcost: {
       eyebrow: 'THE IN-HOUSE ALTERNATIVE',
-      h2: 'Or build the whole department yourself.',
-      sub: "Everything in these packages is real work, done by real specialists. Here's what the same team costs to hire in-house at New York market rates — fully loaded with payroll taxes, benefits, PTO, and the software each role needs.",
+      h2: 'Why build an entire department?',
+      sub: 'The table below shows what it would cost to hire the specialists you need — their salaries, benefits, software, and overhead. With EE Metro, you get the capabilities of an entire team for one predictable low cost.',
       brand: 'IN-HOUSE TEAM · MONTHLY PAYROLL',
       docType: 'DOC TYPE: STAFFING & SOFTWARE ESTIMATE',
       region: 'REGION: NY METRO',
@@ -500,8 +500,8 @@ export const strings = {
     },
     teamcost: {
       eyebrow: 'LA ALTERNATIVA INTERNA',
-      h2: 'O arme todo el departamento usted mismo.',
-      sub: 'Todo lo que hay en estos paquetes es trabajo real, hecho por especialistas reales. Esto es lo que cuesta contratar al mismo equipo de forma interna a tarifas de mercado de Nueva York — con costo total: impuestos de nómina, prestaciones, vacaciones y el software que cada puesto necesita.',
+      h2: '¿Por qué armar todo un departamento?',
+      sub: 'La tabla de abajo muestra lo que costaría contratar a los especialistas que necesita — sus salarios, prestaciones, software y gastos generales. Con EE Metro, obtiene las capacidades de un equipo completo por un solo costo bajo y predecible.',
       brand: 'EQUIPO INTERNO · NÓMINA MENSUAL',
       docType: 'TIPO DOC: ESTIMADO DE PERSONAL Y SOFTWARE',
       region: 'REGIÓN: NY METRO',
