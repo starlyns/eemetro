@@ -187,9 +187,9 @@ export const strings = {
       },
     },
     portal: {
-      eyebrow: 'INSIDE REVENUE OS',
+      eyebrow: 'THE WHOLESALE ORDERING PORTAL',
       h2: "Your customers order like it's 2026",
-      body: 'Revenue OS includes a private ordering portal under your brand: your catalog, your prices per account, one-click reorders from order history, and delivery-day cutoffs built in. Buyers stop calling to ask "what did we get last time?" — it\'s on their screen.',
+      body: 'Every EE Metro plan starts with a private ordering portal under your brand: your catalog, your prices per account, one-click reorders from order history, and delivery-day cutoffs built in. Buyers stop calling to ask "what did we get last time?" — it\'s on their screen.',
       ticks: [
         'Account-specific catalogs and pricing',
         'One-click reorder from past invoices',
@@ -455,9 +455,9 @@ export const strings = {
       },
     },
     portal: {
-      eyebrow: 'DENTRO DE REVENUE OS',
+      eyebrow: 'EL PORTAL DE PEDIDOS MAYORISTA',
       h2: 'Sus clientes ordenan como si fuera 2026',
-      body: 'Revenue OS incluye un portal de pedidos privado bajo su marca: su catálogo, sus precios por cuenta, reórdenes con un clic desde el historial y cierres por día de entrega ya integrados. Los compradores dejan de llamar para preguntar "¿qué pedimos la última vez?" — lo tienen en su pantalla.',
+      body: 'Cada plan de EE Metro empieza con un portal de pedidos privado bajo su marca: su catálogo, sus precios por cuenta, reórdenes con un clic desde el historial y cierres por día de entrega ya integrados. Los compradores dejan de llamar para preguntar "¿qué pedimos la última vez?" — lo tienen en su pantalla.',
       ticks: [
         'Catálogos y precios específicos por cuenta',
         'Reorden con un clic desde facturas anteriores',
